@@ -15,13 +15,13 @@ public class PersonDTO {
     private String address;
     private String cityInfo;
     private List<String> phoneNumber;
-    private String hobby;
+    private List<String> hobbies;
 
     public PersonDTO()
     {
     }
 
-    public PersonDTO(String firstName, String lastName, String email, String address, String cityInfo, List<String> phoneNumber, String hobby)
+    public PersonDTO(String firstName, String lastName, String email, String address, String cityInfo, List<String> phoneNumber, List<String> hobbies)
     {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -29,7 +29,7 @@ public class PersonDTO {
         this.address = address;
         this.cityInfo = cityInfo;
         this.phoneNumber = phoneNumber;
-        this.hobby = hobby;
+        this.hobbies = hobbies;
     }
 
     public String getFirstName()
@@ -92,15 +92,17 @@ public class PersonDTO {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getHobby()
+    public List<String> getHobbies()
     {
-        return hobby;
+        return hobbies;
     }
 
-    public void setHobby(String hobby)
+    public void setHobbies(List<String> hobbies)
     {
-        this.hobby = hobby;
+        this.hobbies = hobbies;
     }
+
+    
     
     
 }

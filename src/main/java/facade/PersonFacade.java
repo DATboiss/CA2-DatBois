@@ -1,5 +1,6 @@
 package facade;
 
+import dto.PersonDTO;
 import entity.Person;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -19,7 +20,7 @@ public class PersonFacade
         this.emf = emf;
     }
     
-    public Person addPerson(Person p)
+    public PersonDTO addPerson(PersonDTO p)
     {
         EntityManager em = emf.createEntityManager();
         
@@ -35,14 +36,14 @@ public class PersonFacade
         return p;
     }
     
-    public Person getPerson(int id)
+    public PersonDTO getPerson(int id)
     {
         EntityManager em = emf.createEntityManager();
-        Person p = null;
+        PersonDTO p = null;
         
         try
         {
-            p = em.find(Person.class, id);
+            p = em.find(PersonDTO.class, id);
         }finally
         {
             em.close();
@@ -50,14 +51,29 @@ public class PersonFacade
         return p;
     }
     
-    public List<Person> getAllPersons()
+    public PersonDTO getPerson(String phoneNum)
     {
         EntityManager em = emf.createEntityManager();
-        List<Person> persons = null;
+        PersonDTO p = null;
         
         try
         {
-            persons = em.createNamedQuery("Person.findAll", Person.class).getResultList();
+            p = em.createNamedQuery("Person.findByPhoneNumber", PersonDTO.class).getSingleResult();
+        }finally
+        {
+            em.close();
+        }
+        return p;
+    }
+    
+    public List<PersonDTO> getAllPersons()
+    {
+        EntityManager em = emf.createEntityManager();
+        List<PersonDTO> persons = null;
+        
+        try
+        {
+            persons = em.createNamedQuery("Person.findAll", PersonDTO.class).getResultList();
         }finally
         {
             em.close();
