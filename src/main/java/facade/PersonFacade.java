@@ -81,6 +81,18 @@ public class PersonFacade
         return persons;
     }
     
+    public int getPersonCountHobby(String hobbyName)
+    {
+        EntityManager em = emf.createEntityManager();
+        
+        int count = 0;
+        
+        try
+        {
+            count = em.createQuery("SELECT COUNT(p) FROM Person p WHERE (SELECT h.name FROM)").getSingleResult();
+        }
+    }
+    
     public Person editPerson(Person p)
     {
         EntityManager em = emf.createEntityManager();
