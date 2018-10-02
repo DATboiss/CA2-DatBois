@@ -1,7 +1,10 @@
 package dto;
 
+import entity.Hobby;
+import entity.Phone;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -21,15 +24,15 @@ public class PersonDTO {
     {
     }
 
-    public PersonDTO(String firstName, String lastName, String email, String address, String cityInfo, List<String> phoneNumber, List<String> hobbies)
+    public PersonDTO(String firstName, String lastName, String email, String address, String cityInfo, List<Phone> phoneNumber, List<Hobby> hobbies)
     {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.address = address;
         this.cityInfo = cityInfo;
-        this.phoneNumber = phoneNumber;
-        this.hobbies = hobbies;
+        this.phoneNumber = phoneNumber.stream().map(p -> p.getNumber()).collect(Collectors.toList());
+        this.hobbies = hobbies.stream().map(h -> h.getName()).collect(Collectors.toList());
     }
 
     public String getFirstName()
