@@ -1,6 +1,7 @@
 package dto;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -14,7 +15,7 @@ public class PersonDTO {
     private AddressDTO address;
     private List<HobbyDTO> hobbies = new ArrayList();
 
-    public PersonDTO(String firstName, String lastName, String email, AddressDTO address, <any> hobbies)
+    public PersonDTO(String firstName, String lastName, String email, AddressDTO address, List<HobbyDTO> hobbies)
     {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -63,16 +64,16 @@ public class PersonDTO {
         this.address = address;
     }
 
-    public HobbyDTO getHobbies()
+    public List<HobbyDTO> getHobbies()
     {
         return hobbies;
     }
-    public HobbyDTO addHobbies(HobbyDTO hobby)
+    public boolean addHobbies(HobbyDTO hobby)
     {
-        hobbies.add(hobby)
+        return hobbies.add(hobby);
     }
 
-    public void setHobbies(<any> hobbies)
+    public void setHobbies(List<HobbyDTO> hobbies)
     {
         this.hobbies = hobbies;
     }
