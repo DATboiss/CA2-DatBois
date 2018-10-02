@@ -26,13 +26,13 @@ public class AddressFacade
         return emf.createEntityManager();
     }
 
-    public List<Person> getPersonFromCity(String city)
+    public List<Person> getPersonFromZip(String zip)
     {
         EntityManager em = getEntityManager();
         try
         {
             em.getTransaction().begin();
-            Query persons = em.createQuery("SELECT p FROM Person p WHERE p.address.cityinfo.city =:city");
+            Query persons = em.createQuery("SELECT p FROM Person p WHERE p.address.cityinfo.zipcode = :zip");
             em.getTransaction().commit();
             return persons.getResultList();
         } finally
@@ -48,7 +48,7 @@ public class AddressFacade
         try
         {
             em.getTransaction().begin();
-            Query zipcodes = em.createQuery("SELECT  c.zip FROM Cityinfo c");
+            Query zipcodes = em.createQuery("SELECT c.city FROM Cityinfo c");
             em.getTransaction().commit();
             return zipcodes.getResultList();
         } finally
