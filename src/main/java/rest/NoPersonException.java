@@ -9,8 +9,8 @@ import javax.ws.rs.core.Response;
  */
 public class NoPersonException extends WebApplicationException {
 
-    public NoPersonException(String msg)
+    public NoPersonException(String message)
     {
-        super(Response.status(406).entity(msg).build());
+        super(Response.status(406).entity(message).build());
     }
 }
