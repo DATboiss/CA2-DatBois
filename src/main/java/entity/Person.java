@@ -25,7 +25,7 @@ import javax.validation.constraints.Size;
 @NamedQueries(
 {
     @NamedQuery(name = "Person.findAll", 
-            query = "SELECT dto.PersonDTO(p.firstName, p.lastName, p.email, p.address.street, p.address.cityinfo, p.phoneCollection, p.hobbyCollection) FROM Person p")
+            query = "SELECT dto.PersonDTO(p.firstName, p.lastName, p.email, p.address.street, p.address.cityinfo, p.phoneCollection, p.hobbyCollection ) FROM Person p")
     , @NamedQuery(name = "Person.findByIdPerson", query = "SELECT p FROM Person p WHERE p.personPK.idPerson = :idPerson")
     , @NamedQuery(name = "Person.findByEmail", query = "SELECT p FROM Person p WHERE p.email = :email")
     , @NamedQuery(name = "Person.findByFirstName", query = "SELECT p FROM Person p WHERE p.firstName = :firstName")

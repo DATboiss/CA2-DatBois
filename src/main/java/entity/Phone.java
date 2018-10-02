@@ -35,7 +35,7 @@ public class Phone implements Serializable
     protected PhonePK phonePK;
    
     @Column(name = "number")
-    private Integer number;
+    private String number;
     
     @Size(max = 45)
     @Column(name = "description")
@@ -49,7 +49,7 @@ public class Phone implements Serializable
     {
     }
 
-    public Phone(Integer number, String description, Person person)
+    public Phone(String number, String description, Person person)
     {
         this.number = number;
         this.description = description;
@@ -61,12 +61,12 @@ public class Phone implements Serializable
         return phonePK;
     }
 
-    public Integer getNumber()
+    public String getNumber()
     {
         return number;
     }
 
-    public void setNumber(Integer number)
+    public void setNumber(String number)
     {
         this.number = number;
     }
