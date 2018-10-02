@@ -12,16 +12,24 @@ public class PersonDTO {
     private String firstName;
     private String lastName;
     private String email;
-    private AddressDTO address;
-    private List<HobbyDTO> hobbies = new ArrayList();
+    private String address;
+    private String cityInfo;
+    private List<String> phoneNumber;
+    private String hobby;
 
-    public PersonDTO(String firstName, String lastName, String email, AddressDTO address, List<HobbyDTO> hobbies)
+    public PersonDTO()
+    {
+    }
+
+    public PersonDTO(String firstName, String lastName, String email, String address, String cityInfo, List<String> phoneNumber, String hobby)
     {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.address = address;
-        this.hobbies = hobbies;
+        this.cityInfo = cityInfo;
+        this.phoneNumber = phoneNumber;
+        this.hobby = hobby;
     }
 
     public String getFirstName()
@@ -54,38 +62,45 @@ public class PersonDTO {
         this.email = email;
     }
 
-    public AddressDTO getAddress()
+    public String getAddress()
     {
         return address;
     }
 
-    public void setAddress(AddressDTO address)
+    public void setAddress(String address)
     {
         this.address = address;
     }
 
-    public List<HobbyDTO> getHobbies()
+    public String getCityInfo()
     {
-        return hobbies;
-    }
-    public boolean addHobbies(HobbyDTO hobby)
-    {
-        return hobbies.add(hobby);
+        return cityInfo;
     }
 
-    public void setHobbies(List<HobbyDTO> hobbies)
+    public void setCityInfo(String cityInfo)
     {
-        this.hobbies = hobbies;
+        this.cityInfo = cityInfo;
     }
 
-    @Override
-    public String toString()
+    public List<String> getPhoneNumber()
     {
-        return "PersonDTO{" + "firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", address=" + address + ", hobbies=" + hobbies + '}';
+        return phoneNumber;
     }
-    
-    
-    
+
+    public void setPhoneNumber(List<String> phoneNumber)
+    {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getHobby()
+    {
+        return hobby;
+    }
+
+    public void setHobby(String hobby)
+    {
+        this.hobby = hobby;
+    }
     
     
 }

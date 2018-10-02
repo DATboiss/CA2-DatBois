@@ -7,51 +7,40 @@ import java.util.List;
  * @author emilv
  */
 public class CityInfoDTO {
-    private int zipCode;
-    private List<AddressDTO> addresses;
+    private String zipCode;
+    private String city;
 
     public CityInfoDTO()
     {
     }
 
-    public CityInfoDTO(int zipCode, List<AddressDTO> addresses)
+    public CityInfoDTO(String zipCode, String city)
     {
         this.zipCode = zipCode;
-        this.addresses = addresses;
+        this.city = city;
     }
 
-    public int getZipCode()
+    public String getZipCode()
     {
         return zipCode;
     }
 
-    public void setZipCode(int zipCode)
+    public void setZipCode(String zipCode)
     {
         this.zipCode = zipCode;
     }
 
-    public List<AddressDTO> getAddresses()
+    public String getCity()
     {
-        return addresses;
-    }
- 
-    
-    public boolean addAddress(AddressDTO address)
-    {
-        return addresses.add(address);
+        return city;
     }
 
-    
-    public void setAddresses(List<AddressDTO> addresses)
+    public void setCity(String city)
     {
-        this.addresses = addresses;
+        this.city = city;
     }
+    
+    
 
-    @Override
-    public String toString()
-    {
-        return "CityInfoDTO{" + "zipCode=" + zipCode + ", addresses=" + addresses + '}';
-    }
-    
     
 }
