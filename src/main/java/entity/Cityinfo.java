@@ -22,12 +22,13 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "cityinfo")
 @NamedQueries(
+        {
+            @NamedQuery(name = "Cityinfo.findAll", query = "SELECT c FROM Cityinfo c")
+            , @NamedQuery(name = "Cityinfo.findByIdCityInfo", query = "SELECT c FROM Cityinfo c WHERE c.idCityInfo = :idCityInfo")
+            , @NamedQuery(name = "Cityinfo.findByCity", query = "SELECT c FROM Cityinfo c WHERE c.city = :city")
+        })
+public class Cityinfo implements Serializable
 {
-    @NamedQuery(name = "Cityinfo.findAll", query = "SELECT c FROM Cityinfo c")
-    , @NamedQuery(name = "Cityinfo.findByIdCityInfo", query = "SELECT c FROM Cityinfo c WHERE c.idCityInfo = :idCityInfo")
-    , @NamedQuery(name = "Cityinfo.findByCity", query = "SELECT c FROM Cityinfo c WHERE c.city = :city")
-})
-public class Cityinfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -35,7 +36,11 @@ public class Cityinfo implements Serializable {
     @Basic(optional = false)
     @Column(name = "idCityInfo")
     private Integer idCityInfo;
-    
+
+    @Size(max = 4)
+    @Column(name = "zipCode")
+    private String zipCode;
+
     @Size(max = 45)
     @Column(name = "city")
     private String city;
@@ -46,16 +51,26 @@ public class Cityinfo implements Serializable {
     {
     }
 
-    public Cityinfo(String city, Collection<Address> addressCollection)
+    public Cityinfo(String zipCode, String city, Collection<Address> addressCollection)
     {
+        this.zipCode = zipCode;
         this.city = city;
         this.addressCollection = addressCollection;
     }
 
-
     public Integer getIdCityInfo()
     {
         return idCityInfo;
+    }
+
+    public String getZipCode()
+    {
+        return zipCode;
+    }
+
+    public void setZipCode(String zipCode)
+    {
+        this.zipCode = zipCode;
     }
 
     public String getCity()

@@ -25,13 +25,17 @@ import javax.validation.constraints.Size;
 @NamedQueries(
 {
     @NamedQuery(name = "Person.findAll", 
-            query = "SELECT dto.PersonDTO(p.firstName, p.lastName, p.email, p.address.street, p.address.cityinfo, p.phoneCollection, p.hobbyCollection ) FROM Person p")
+            query = "SELECT dto.PersonDTO(p.firstName, p.lastName, p.email, p.address.street, p.address.cityinfo, p.phoneCollection, p.hobbyCollection) "
+                    + "FROM Person p")
+    , @NamedQuery(name = "Person.findByHobby", 
+            query = "SELECT dto.PersonDTO(p.firstName, p.lastName, p.email, p.address.street, p.address.cityinfo, p.phoneCollection, p.hobbyCollection) "
+                    + "FROM Person p WHERE (SELECT h.name FROM p.hobbyCollection h = :name")
     , @NamedQuery(name = "Person.findByIdPerson", query = "SELECT p FROM Person p WHERE p.personPK.idPerson = :idPerson")
     , @NamedQuery(name = "Person.findByEmail", query = "SELECT p FROM Person p WHERE p.email = :email")
     , @NamedQuery(name = "Person.findByFirstName", query = "SELECT p FROM Person p WHERE p.firstName = :firstName")
     , @NamedQuery(name = "Person.findByLastName", query = "SELECT p FROM Person p WHERE p.lastName = :lastName")
     , @NamedQuery(name = "Person.findByAddressidAddress", query = "SELECT p FROM Person p WHERE p.personPK.addressidAddress = :addressidAddress")
-    , @NamedQuery(name = "Person.findByAddressCityInfoidCityInfo", query = "SELECT p FROM Person p WHERE p.personPK.addressCityInfoidCityInfo = :addressCityInfoidCityInfo")
+    , @NamedQuery(name = "Person.findByZipCode", query = "SELECT p FROM Person p JOIN Address JOIN CityInfo c WHERE p.address.cityinfo.zipCode = :zipCode")
     , @NamedQuery(name = "Person.findByPhoneNumber", query = "SELECT dto.PersonDTO FROM Person p WHERE (SELECT ph.number FROM p.phoneCollection = :number)")
 })
 public class Person implements Serializable {
