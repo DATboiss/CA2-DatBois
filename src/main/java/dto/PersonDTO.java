@@ -15,8 +15,10 @@ public class PersonDTO {
     private String firstName;
     private String lastName;
     private String email;
-    private String address;
-    private String cityInfo;
+    private String addressStreet;
+    private String addressAdditionalInfo;
+    private String zipcode;
+    private String city;
     private List<String> phoneNumber;
     private List<String> hobbies;
 
@@ -24,13 +26,12 @@ public class PersonDTO {
     {
     }
 
-    public PersonDTO(String firstName, String lastName, String email, String address, String cityInfo, List<Phone> phoneNumber, List<Hobby> hobbies)
+    public PersonDTO(String firstName, String lastName, String email, String address, List<Phone> phoneNumber, List<Hobby> hobbies)
     {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.address = address;
-        this.cityInfo = cityInfo;
+        this.addressStreet = address;
         this.phoneNumber = phoneNumber.stream().map(p -> p.getNumber()).collect(Collectors.toList());
         this.hobbies = hobbies.stream().map(h -> h.getName()).collect(Collectors.toList());
     }
@@ -65,24 +66,14 @@ public class PersonDTO {
         this.email = email;
     }
 
-    public String getAddress()
+    public String getAddressStreet()
     {
-        return address;
+        return addressStreet;
     }
 
-    public void setAddress(String address)
+    public void setAddressStreet(String addressStreet)
     {
-        this.address = address;
-    }
-
-    public String getCityInfo()
-    {
-        return cityInfo;
-    }
-
-    public void setCityInfo(String cityInfo)
-    {
-        this.cityInfo = cityInfo;
+        this.addressStreet = addressStreet;
     }
 
     public List<String> getPhoneNumber()
@@ -103,6 +94,36 @@ public class PersonDTO {
     public void setHobbies(List<String> hobbies)
     {
         this.hobbies = hobbies;
+    }
+
+    public String getAddressAdditionalInfo()
+    {
+        return addressAdditionalInfo;
+    }
+
+    public void setAddressAdditionalInfo(String addressAdditionalInfo)
+    {
+        this.addressAdditionalInfo = addressAdditionalInfo;
+    }
+
+    public String getZipcode()
+    {
+        return zipcode;
+    }
+
+    public void setZipcode(String zipcode)
+    {
+        this.zipcode = zipcode;
+    }
+
+    public String getCity()
+    {
+        return city;
+    }
+
+    public void setCity(String city)
+    {
+        this.city = city;
     }
 
     

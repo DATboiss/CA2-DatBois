@@ -1,5 +1,6 @@
 package entity;
 
+import dto.PersonDTO;
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.CascadeType;
@@ -85,6 +86,15 @@ public class Person implements Serializable {
         this.phoneCollection = phoneCollection;
         this.address = address;
     }
+    
+//    public Person(PersonDTO pDTO)
+//    {
+//        this.firstName = pDTO.getFirstName();
+//        this.lastName = pDTO.getLastName();
+//        this.email = pDTO.getEmail();
+//        this.address = new Address(pDTO.getAddressStreet(), pDTO.getAddressAdditionalInfo(), new Cityinfo(pDTO.getZipcode(), pDTO.getCity()));
+//                
+//    }
     
 
     public PersonPK getPersonPK()

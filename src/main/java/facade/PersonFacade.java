@@ -20,10 +20,9 @@ public class PersonFacade
         this.emf = emf;
     }
 
-    public PersonDTO addPerson(PersonDTO p)
+    public Person addPerson(Person p)
     {
         EntityManager em = emf.createEntityManager();
-
         try
         {
             em.getTransaction().begin();
@@ -84,7 +83,6 @@ public class PersonFacade
     public Person editPerson(Person p)
     {
         EntityManager em = emf.createEntityManager();
-
         try
         {
             em.getTransaction().begin();
