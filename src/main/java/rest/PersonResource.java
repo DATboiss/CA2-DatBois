@@ -75,7 +75,8 @@ public class PersonResource {
     public Response getPersonWithAddress(@PathParam("address") String address)
     {
         //Use Facade to get the person, this is just an example of the exception handling
-        PersonDTO p = null;
+        List<PersonDTO> p = null;
+        pf.getPersonByAddress(address);
         if (p != null)
         {
             return Response.ok(GSON.toJson(p)).build();
@@ -99,7 +100,7 @@ public class PersonResource {
     {
         //Use Facade to get the person, this is just an example of the exception handling
         PersonDTO p = null;
-        p = pf.getPerson(phoneNumber);
+        p = pf.getPersonByPhoneNumber(phoneNumber);
         if (p != null)
         {
             return Response.ok(GSON.toJson(p)).build();
@@ -181,9 +182,9 @@ public class PersonResource {
      * @param id representation of the Person's id
      */
     @PUT
-    @Path("{id}")
+    @Path("update")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void putPerson(String json, @PathParam("id") String id)
+    public void putPerson(String json)
     {
         Person p = null;
         p = GSON.fromJson(json, Person.class);
@@ -203,9 +204,9 @@ public class PersonResource {
     @DELETE
     @Path("{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void deletePerson(@PathParam("id") String id)
+    public void deletePerson(@PathParam("id") int id)
     {
-
+        pf.deletePerson(id);
     }
 
 }
