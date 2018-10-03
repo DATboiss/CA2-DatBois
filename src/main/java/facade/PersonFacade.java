@@ -58,7 +58,7 @@ public class PersonFacade
 
         try
         {
-            p = em.createNamedQuery("Person.findByPhoneNumber", PersonDTO.class).getSingleResult();
+            p = em.createNamedQuery("Person.findByPhoneNumber", PersonDTO.class).setParameter("number", phoneNum).getSingleResult();
         } finally
         {
             em.close();
@@ -81,19 +81,6 @@ public class PersonFacade
         return persons;
     }
     
-    public int getPersonCountHobby(String hobbyName)
-    {
-        EntityManager em = emf.createEntityManager();
-        
-        int count = 0;
-        
-        try
-        {
-            count = em.createQuery("SELECT COUNT(p) FROM Person p WHERE (SELECT h.name FROM)").getSingleResult();
-        }
-    }
-    
-
     public Person editPerson(Person p)
     {
         EntityManager em = emf.createEntityManager();
@@ -143,6 +130,23 @@ public class PersonFacade
             em.close();
         }
         return persons;
+    }
+    
+     public int getPersonCountHobby(String hobbyName)
+    {
+        EntityManager em = emf.createEntityManager();
+        
+        int count = 0;
+        
+        try
+        {
+            count = (int) em.createQuery("SELECT COUNT(p) FROM Person p WHERE (SELECT h.name FROM p.hobbyCollection h = :hobbyName)")
+                    .setParameter("hobbyName", hobbyName).getSingleResult();
+        } finally
+        {
+            em.close();
+        }
+        return count;
     }
     
      public List<PersonDTO> getPersonsByCity(String zipCode)
