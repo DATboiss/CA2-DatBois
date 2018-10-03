@@ -1,4 +1,4 @@
-package rest;
+package cors;
 
 import java.io.IOException;
 import java.util.logging.Logger;
