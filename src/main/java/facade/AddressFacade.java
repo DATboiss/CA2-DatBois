@@ -32,7 +32,7 @@ public class AddressFacade
         try
         {
             em.getTransaction().begin();
-            Query persons = em.createQuery("SELECT p FROM Person p WHERE p.address.cityinfo.zipcode = :zip");
+            Query persons = em.createQuery("SELECT p FROM Person p JOIN Address a JOIN Cityinfo c WHERE p.address.cityinfo.zipcode = :zip");
             em.getTransaction().commit();
             return persons.getResultList();
         } finally

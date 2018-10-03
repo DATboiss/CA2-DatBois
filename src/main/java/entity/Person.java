@@ -35,7 +35,7 @@ import javax.validation.constraints.Size;
     , @NamedQuery(name = "Person.findByFirstName", query = "SELECT p FROM Person p WHERE p.firstName = :firstName")
     , @NamedQuery(name = "Person.findByLastName", query = "SELECT p FROM Person p WHERE p.lastName = :lastName")
     , @NamedQuery(name = "Person.findByAddressidAddress", query = "SELECT p FROM Person p WHERE p.personPK.addressidAddress = :addressidAddress")
-    , @NamedQuery(name = "Person.findByZipCode", query = "SELECT p FROM Person p JOIN Address JOIN CityInfo c WHERE p.address.cityinfo.zipCode = :zipCode")
+    , @NamedQuery(name = "Person.findByZipCode", query = "SELECT p FROM Person p JOIN Address JOIN Cityinfo c WHERE p.address.cityinfo.zipCode = :zipCode")
     , @NamedQuery(name = "Person.findByPhoneNumber", query = "SELECT dto.PersonDTO FROM Person p WHERE (SELECT ph.number FROM p.phoneCollection = :number)")
 })
 public class Person implements Serializable {
