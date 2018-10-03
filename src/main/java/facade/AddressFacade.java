@@ -33,6 +33,7 @@ public class AddressFacade
         {
             em.getTransaction().begin();
             Query persons = em.createQuery("SELECT p FROM Person p JOIN Address a JOIN Cityinfo c WHERE p.address.cityinfo.zipcode = :zip");
+            persons.setParameter("zip", zip);
             em.getTransaction().commit();
             return persons.getResultList();
         } finally

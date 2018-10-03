@@ -1,6 +1,7 @@
 package facade;
 
 import dto.PersonDTO;
+import entity.Hobby;
 import entity.Person;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -132,9 +133,7 @@ public class PersonFacade
 
         try
         {
-            em.getTransaction().begin();
             persons = em.createNamedQuery("SELECT p FROM Person p JOIN Address JOIN Cityinfo c WHERE p.address.cityinfo.zipCode = :zipCode", PersonDTO.class).setParameter("zipCode", zipCode).getResultList();
-            em.getTransaction().commit();
         } finally
         {
             em.close();
@@ -149,11 +148,9 @@ public class PersonFacade
 
         try
         {
-            em.getTransaction().begin();
             persons = em.createQuery("SELECT dto.PersonDTO"
                     + "(p.firstName, p.lastName, p.email, p.address, p.phoneCollection, p.hobbyCollection) "
                     + "FROM Person p JOIN Address a WHERE p.address.street = :address").setParameter("address", address).getResultList();
-            em.getTransaction().commit();
         } finally
         {
             em.close();
@@ -210,6 +207,36 @@ public class PersonFacade
             em.close();
         }
         return p;
+    }
+    
+    public List<PersonDTO> getPersonByHobby(String Hobby)
+    {
+        EntityManager em = emf.createEntityManager();
+        List<PersonDTO> persons = null;
+
+        try
+        {
+            persons = em.createQuery("SELECT dto.PersonDTO(p.firstName, p.lastName, p.email, p.address.street, p.address.cityinfo, p.phoneCollection, p.hobbyCollection) FROM Person p JOIN Hobby h WHERE h.name = :hobbyName").setParameter("hobbyName", Hobby).getResultList();
+        } finally
+        {
+            em.close();
+        }
+        return persons;
+    }
+    
+    public List<Hobby> getAllHobbies()
+    {
+        EntityManager em = emf.createEntityManager();
+        List<Hobby> hobbies = null;
+
+        try
+        {
+            hobbies = em.createNamedQuery("SELECT h FROM Hobby h", Hobby.class).getResultList();
+        } finally
+        {
+            em.close();
+        }
+        return hobbies;
     }
 
 }//CLASS
