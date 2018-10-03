@@ -30,7 +30,7 @@ public class Person implements Serializable
     private static final long serialVersionUID = 1L;
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    protected PersonPK personPK;
+    private Integer idPerson;
 
     @Size(max = 45)
     @Column(name = "email")
@@ -72,10 +72,11 @@ public class Person implements Serializable
         this.address = address;
     }
 
-    public PersonPK getPersonPK()
+    public Integer getIdPerson()
     {
-        return personPK;
+        return idPerson;
     }
+
 
     public String getEmail()
     {

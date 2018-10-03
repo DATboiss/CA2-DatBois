@@ -25,24 +25,23 @@ import javax.validation.constraints.Size;
 @Table(name = "address")
 public class Address implements Serializable
 {
-
     private static final long serialVersionUID = 1L;
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    protected AddressPK addressPK;
-    
+    private Integer idAddress;
+
     @Size(max = 45)
     @Column(name = "Street")
     private String street;
-   
+
     @Size(max = 45)
     @Column(name = "additionalInfo")
     private String additionalInfo;
-    
-    @JoinColumn(name = "CityInfo_idCityInfo", referencedColumnName = "idCityInfo", insertable = false, updatable = false)
-    @ManyToOne(optional = false)
-    
+
+    @JoinColumn(name = "CityInfo_idCityInfo", referencedColumnName = "idCityInfo")
+    @ManyToOne
     private Cityinfo cityinfo;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "address")
     private Collection<Person> personCollection;
 
@@ -58,9 +57,9 @@ public class Address implements Serializable
         this.personCollection = personCollection;
     }
 
-    public AddressPK getAddressPK()
+    public Integer getIdAddress()
     {
-        return addressPK;
+        return idAddress;
     }
 
     public String getStreet()
@@ -102,6 +101,5 @@ public class Address implements Serializable
     {
         this.personCollection = personCollection;
     }
-
 
 }

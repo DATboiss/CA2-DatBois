@@ -2,15 +2,12 @@ package entity;
 
 import java.io.Serializable;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
@@ -26,7 +23,7 @@ public class Phone implements Serializable
     private static final long serialVersionUID = 1L;
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    protected PhonePK phonePK;
+    private Integer idPhone;
 
     @Column(name = "number")
     private String number;
@@ -50,9 +47,9 @@ public class Phone implements Serializable
         this.person = person;
     }
 
-    public PhonePK getPhonePK()
+    public Integer getIdPhone()
     {
-        return phonePK;
+        return idPhone;
     }
 
     public String getNumber()
