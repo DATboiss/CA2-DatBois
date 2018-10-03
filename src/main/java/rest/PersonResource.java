@@ -122,7 +122,8 @@ public class PersonResource {
     public Response getPersonWithZipCode(@PathParam("zipCode") String zipCode)
     {
         //Use Facade to get the person, this is just an example of the exception handling
-        PersonDTO p = null;
+        List<PersonDTO> p = null;
+        p = pf.getPersonsByCity(zipCode);
         if (p != null)
         {
             return Response.ok(GSON.toJson(p)).build();
@@ -151,6 +152,30 @@ public class PersonResource {
         } else
         {
             throw new NoPersonException("No persons with the given address was found");
+        }
+    }
+    
+        /**
+     * Retrieves representation of all instances of Person with the given zip code
+     *
+     *
+     * @param zipCode representaion of a zipCode
+     * @return a response code and representation of a Person
+     */
+    @GET
+    @Path("hobby/{hobby}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getPersonWithHobby(@PathParam("hobby") String hobby)
+    {
+        //Use Facade to get the person, this is just an example of the exception handling
+        List<PersonDTO> p = null;
+        p = pf.getPersonsByHobby(hobby);
+        if (p != null)
+        {
+            return Response.ok(GSON.toJson(p)).build();
+        } else
+        {
+            throw new NoPersonException("No persons with the given hobby was found");
         }
     }
     
