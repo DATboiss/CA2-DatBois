@@ -97,3 +97,4 @@ hs_err_pid*
 /target/**
 /src/main/java/Connector/testMain.java
 /nbproject/
+/src/main/resources/META-INF/
