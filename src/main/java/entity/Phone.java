@@ -20,14 +20,6 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "phone")
-//@NamedQueries(
-//        {
-//            @NamedQuery(name = "Phone.findAll", query = "SELECT p FROM Phone p")
-//            , @NamedQuery(name = "Phone.findByIdPhone", query = "SELECT p FROM Phone p WHERE p.phonePK.idPhone = :idPhone")
-//            , @NamedQuery(name = "Phone.findByNumber", query = "SELECT p FROM Phone p WHERE p.number = :number")
-//            , @NamedQuery(name = "Phone.findByDescription", query = "SELECT p FROM Phone p WHERE p.description = :description")
-//            , @NamedQuery(name = "Phone.findByPersonidPerson", query = "SELECT p FROM Phone p WHERE p.phonePK.personidPerson = :personidPerson")
-//        })
 public class Phone implements Serializable
 {
 

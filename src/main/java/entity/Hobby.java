@@ -22,13 +22,6 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "hobby")
-@NamedQueries(
-{
-    @NamedQuery(name = "Hobby.findAll", query = "SELECT h FROM Hobby h")
-    , @NamedQuery(name = "Hobby.findByIdHobby", query = "SELECT h FROM Hobby h WHERE h.idHobby = :idHobby")
-    , @NamedQuery(name = "Hobby.findByName", query = "SELECT h FROM Hobby h WHERE h.name = :name")
-    , @NamedQuery(name = "Hobby.findByDescription", query = "SELECT h FROM Hobby h WHERE h.description = :description")
-})
 public class Hobby implements Serializable {
 
     private static final long serialVersionUID = 1L;
