@@ -23,14 +23,14 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "address")
-@NamedQueries(
-        {
-            @NamedQuery(name = "Address.findAll", query = "SELECT a FROM Address a")
-            , @NamedQuery(name = "Address.findByIdAddress", query = "SELECT a FROM Address a WHERE a.addressPK.idAddress = :idAddress")
-            , @NamedQuery(name = "Address.findByStreet", query = "SELECT a FROM Address a WHERE a.street = :street")
-            , @NamedQuery(name = "Address.findByAdditionalInfo", query = "SELECT a FROM Address a WHERE a.additionalInfo = :additionalInfo")
-            , @NamedQuery(name = "Address.findByCityInfoidCityInfo", query = "SELECT a FROM Address a WHERE a.addressPK.cityInfoidCityInfo = :cityInfoidCityInfo")
-        })
+//@NamedQueries(
+//        {
+//            @NamedQuery(name = "Address.findAll", query = "SELECT a FROM Address a")
+//            , @NamedQuery(name = "Address.findByIdAddress", query = "SELECT a FROM Address a WHERE a.addressPK.idAddress = :idAddress")
+//            , @NamedQuery(name = "Address.findByStreet", query = "SELECT a FROM Address a WHERE a.street = :street")
+//            , @NamedQuery(name = "Address.findByAdditionalInfo", query = "SELECT a FROM Address a WHERE a.additionalInfo = :additionalInfo")
+//            , @NamedQuery(name = "Address.findByCityInfoidCityInfo", query = "SELECT a FROM Address a WHERE a.addressPK.cityInfoidCityInfo = :cityInfoidCityInfo")
+//        })
 public class Address implements Serializable
 {
 

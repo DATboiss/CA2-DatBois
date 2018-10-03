@@ -6,6 +6,9 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToMany;
@@ -22,56 +25,58 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "person")
-@NamedQueries(
+//@NamedQueries(
+//        {
+//            @NamedQuery(name = "Person.findAll",
+//                    query = "SELECT dto.PersonDTO(p.firstName, p.lastName, p.email, p.address.street, p.address.cityinfo, p.phoneCollection, p.hobbyCollection) "
+//                    + "FROM Person p")
+//            , @NamedQuery(name = "Person.findByHobby",
+//                    query = "SELECT dto.PersonDTO(p.firstName, p.lastName, p.email, p.address.street, p.address.cityinfo, p.phoneCollection, p.hobbyCollection) "
+//                    + "FROM Person p WHERE (SELECT h.name FROM p.hobbyCollection h = :name")
+//            , @NamedQuery(name = "Person.findByIdPerson", query = "SELECT p FROM Person p WHERE p.personPK.idPerson = :idPerson")
+//            , @NamedQuery(name = "Person.findByEmail", query = "SELECT p FROM Person p WHERE p.email = :email")
+//            , @NamedQuery(name = "Person.findByFirstName", query = "SELECT p FROM Person p WHERE p.firstName = :firstName")
+//            , @NamedQuery(name = "Person.findByLastName", query = "SELECT p FROM Person p WHERE p.lastName = :lastName")
+//            , @NamedQuery(name = "Person.findByAddressidAddress", query = "SELECT p FROM Person p WHERE p.personPK.addressidAddress = :addressidAddress")
+//            , @NamedQuery(name = "Person.findByZipCode", query = "SELECT p FROM Person p JOIN Address JOIN Cityinfo c WHERE p.address.cityinfo.zipCode = :zipCode")
+//            , @NamedQuery(name = "Person.findByPhoneNumber", query = "SELECT dto.PersonDTO"
+//                    + "(p.firstName, p.lastName, p.email, p.address.street, p.address.cityinfo, p.phoneCollection, p.hobbyCollection) "
+//                    + "FROM Person p WHERE (SELECT ph.number FROM p.phoneCollection ph = :number)")
+//            , @NamedQuery(name = "Person.findByName", query = "SELECT dto.PersonDTO"
+//                    + "(p.firstName, p.lastName, p.email, p.address.street, p.address.cityinfo, p.phoneCollection, p.hobbyCollection) "
+//                    + "FROM Person p WHERE p.firstName = :firstName AND p.lastName = :lastName")
+//        })
+public class Person implements Serializable
 {
-    @NamedQuery(name = "Person.findAll", 
-            query = "SELECT dto.PersonDTO(p.firstName, p.lastName, p.email, p.address.street, p.address.cityinfo, p.phoneCollection, p.hobbyCollection) "
-                    + "FROM Person p")
-    , @NamedQuery(name = "Person.findByHobby", 
-            query = "SELECT dto.PersonDTO(p.firstName, p.lastName, p.email, p.address.street, p.address.cityinfo, p.phoneCollection, p.hobbyCollection) "
-                    + "FROM Person p WHERE (SELECT h.name FROM p.hobbyCollection h = :name")
-    , @NamedQuery(name = "Person.findByIdPerson", query = "SELECT p FROM Person p WHERE p.personPK.idPerson = :idPerson")
-    , @NamedQuery(name = "Person.findByEmail", query = "SELECT p FROM Person p WHERE p.email = :email")
-    , @NamedQuery(name = "Person.findByFirstName", query = "SELECT p FROM Person p WHERE p.firstName = :firstName")
-    , @NamedQuery(name = "Person.findByLastName", query = "SELECT p FROM Person p WHERE p.lastName = :lastName")
-    , @NamedQuery(name = "Person.findByAddressidAddress", query = "SELECT p FROM Person p WHERE p.personPK.addressidAddress = :addressidAddress")
-    , @NamedQuery(name = "Person.findByZipCode", query = "SELECT p FROM Person p JOIN Address JOIN Cityinfo c WHERE p.address.cityinfo.zipCode = :zipCode")
-    , @NamedQuery(name = "Person.findByPhoneNumber", query = "SELECT dto.PersonDTO"
-            + "(p.firstName, p.lastName, p.email, p.address.street, p.address.cityinfo, p.phoneCollection, p.hobbyCollection) "
-            + "FROM Person p WHERE (SELECT ph.number FROM p.phoneCollection ph = :number)")
-    , @NamedQuery(name = "Person.findByName", query = "SELECT dto.PersonDTO"
-            + "(p.firstName, p.lastName, p.email, p.address.street, p.address.cityinfo, p.phoneCollection, p.hobbyCollection) "
-            + "FROM Person p WHERE p.firstName = :firstName AND p.lastName = :lastName")
-})
-public class Person implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @EmbeddedId
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     protected PersonPK personPK;
-    
+
     @Size(max = 45)
     @Column(name = "email")
     private String email;
-    
+
     @Size(max = 45)
     @Column(name = "firstName")
     private String firstName;
-   
+
     @Size(max = 45)
     @Column(name = "lastName")
     private String lastName;
-    
+
     @ManyToMany(mappedBy = "personCollection")
     private Collection<Hobby> hobbyCollection;
-   
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "person")
     private Collection<Phone> phoneCollection;
-   
+
     @JoinColumns(
-    {
-        @JoinColumn(name = "Address_idAddress", referencedColumnName = "idAddress", insertable = false, updatable = false)
-        , @JoinColumn(name = "Address_CityInfo_idCityInfo", referencedColumnName = "CityInfo_idCityInfo", insertable = false, updatable = false)
-    })
+            {
+                @JoinColumn(name = "Address_idAddress", referencedColumnName = "idAddress", insertable = false, updatable = false)
+                , @JoinColumn(name = "Address_CityInfo_idCityInfo", referencedColumnName = "CityInfo_idCityInfo", insertable = false, updatable = false)
+            })
     @ManyToOne(optional = false)
     private Address address;
 
@@ -88,7 +93,6 @@ public class Person implements Serializable {
         this.phoneCollection = phoneCollection;
         this.address = address;
     }
-    
 
     public PersonPK getPersonPK()
     {
@@ -154,6 +158,5 @@ public class Person implements Serializable {
     {
         this.address = address;
     }
-
 
 }
