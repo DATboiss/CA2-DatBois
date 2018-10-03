@@ -23,34 +23,25 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "address")
-@NamedQueries(
-        {
-            @NamedQuery(name = "Address.findAll", query = "SELECT a FROM Address a")
-            , @NamedQuery(name = "Address.findByIdAddress", query = "SELECT a FROM Address a WHERE a.addressPK.idAddress = :idAddress")
-            , @NamedQuery(name = "Address.findByStreet", query = "SELECT a FROM Address a WHERE a.street = :street")
-            , @NamedQuery(name = "Address.findByAdditionalInfo", query = "SELECT a FROM Address a WHERE a.additionalInfo = :additionalInfo")
-            , @NamedQuery(name = "Address.findByCityInfoidCityInfo", query = "SELECT a FROM Address a WHERE a.addressPK.cityInfoidCityInfo = :cityInfoidCityInfo")
-        })
 public class Address implements Serializable
 {
-
     private static final long serialVersionUID = 1L;
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    protected AddressPK addressPK;
-    
+    private Integer idAddress;
+
     @Size(max = 45)
     @Column(name = "Street")
     private String street;
-   
+
     @Size(max = 45)
     @Column(name = "additionalInfo")
     private String additionalInfo;
-    
-    @JoinColumn(name = "CityInfo_idCityInfo", referencedColumnName = "idCityInfo", insertable = false, updatable = false)
-    @ManyToOne(optional = false)
-    
+
+    @JoinColumn(name = "CityInfo_idCityInfo", referencedColumnName = "idCityInfo")
+    @ManyToOne
     private Cityinfo cityinfo;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "address")
     private Collection<Person> personCollection;
 
@@ -65,9 +56,9 @@ public class Address implements Serializable
         this.cityinfo = cityinfo;
     }
 
-    public AddressPK getAddressPK()
+    public Integer getIdAddress()
     {
-        return addressPK;
+        return idAddress;
     }
 
     public String getStreet()
@@ -109,6 +100,5 @@ public class Address implements Serializable
     {
         this.personCollection = personCollection;
     }
-
 
 }

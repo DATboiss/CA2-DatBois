@@ -2,14 +2,12 @@ package entity;
 
 import java.io.Serializable;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
@@ -19,28 +17,21 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "phone")
-@NamedQueries(
-        {
-            @NamedQuery(name = "Phone.findAll", query = "SELECT p FROM Phone p")
-            , @NamedQuery(name = "Phone.findByIdPhone", query = "SELECT p FROM Phone p WHERE p.phonePK.idPhone = :idPhone")
-            , @NamedQuery(name = "Phone.findByNumber", query = "SELECT p FROM Phone p WHERE p.number = :number")
-            , @NamedQuery(name = "Phone.findByDescription", query = "SELECT p FROM Phone p WHERE p.description = :description")
-            , @NamedQuery(name = "Phone.findByPersonidPerson", query = "SELECT p FROM Phone p WHERE p.phonePK.personidPerson = :personidPerson")
-        })
 public class Phone implements Serializable
 {
 
     private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    protected PhonePK phonePK;
-   
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    private Integer idPhone;
+
     @Column(name = "number")
     private String number;
-    
+
     @Size(max = 45)
     @Column(name = "description")
     private String description;
-    
+
     @JoinColumn(name = "Person_idPerson", referencedColumnName = "idPerson", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Person person;
@@ -56,9 +47,9 @@ public class Phone implements Serializable
         this.person = person;
     }
 
-    public PhonePK getPhonePK()
+    public Integer getIdPhone()
     {
-        return phonePK;
+        return idPhone;
     }
 
     public String getNumber()
@@ -90,6 +81,5 @@ public class Phone implements Serializable
     {
         this.person = person;
     }
-
 
 }
