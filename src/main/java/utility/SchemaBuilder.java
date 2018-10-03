@@ -5,6 +5,7 @@
  */
 package utility;
 
+import java.util.HashMap;
 import javax.persistence.Persistence;
 
 /**
@@ -19,7 +20,7 @@ public class SchemaBuilder
      */
     public static void main(String[] args)
     {
-        Persistence.generateSchema("pu", null);
+        Persistence.generateSchema("pu", new HashMap());
     }
     
 }
