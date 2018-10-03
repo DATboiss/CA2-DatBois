@@ -23,7 +23,6 @@ public class PersonFacade
     public Person addPerson(Person p)
     {
         EntityManager em = emf.createEntityManager();
-
         try
         {
             em.getTransaction().begin();

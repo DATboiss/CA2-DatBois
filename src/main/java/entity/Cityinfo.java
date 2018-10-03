@@ -44,11 +44,10 @@ public class Cityinfo implements Serializable
     {
     }
 
-    public Cityinfo(String zipCode, String city, Collection<Address> addressCollection)
+    public Cityinfo(String zipCode, String city)
     {
         this.zipCode = zipCode;
         this.city = city;
-        this.addressCollection = addressCollection;
     }
 
     public Integer getIdCityInfo()
