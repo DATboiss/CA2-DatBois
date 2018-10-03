@@ -75,8 +75,8 @@ function postPerson() {
             description: hobbyDesc
         }
     }
-    console.log(p);
-    fetch(URL + "/", makeOptions("POST", p))
+    console.log(JSON.stringify(p));
+    fetch(URL + "/", makeOptions("POST", JSON.stringify(p)))
     .then(handleHttpErrors)
     .then(data => console.log(data))
     .catch(err => {
