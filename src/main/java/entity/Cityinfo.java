@@ -21,15 +21,8 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "cityinfo")
-@NamedQueries(
-        {
-            @NamedQuery(name = "Cityinfo.findAll", query = "SELECT c FROM Cityinfo c")
-            , @NamedQuery(name = "Cityinfo.findByIdCityInfo", query = "SELECT c FROM Cityinfo c WHERE c.idCityInfo = :idCityInfo")
-            , @NamedQuery(name = "Cityinfo.findByCity", query = "SELECT c FROM Cityinfo c WHERE c.city = :city")
-        })
 public class Cityinfo implements Serializable
 {
-
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,11 +44,10 @@ public class Cityinfo implements Serializable
     {
     }
 
-    public Cityinfo(String zipCode, String city, Collection<Address> addressCollection)
+    public Cityinfo(String zipCode, String city)
     {
         this.zipCode = zipCode;
         this.city = city;
-        this.addressCollection = addressCollection;
     }
 
     public Integer getIdCityInfo()
