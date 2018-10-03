@@ -39,10 +39,10 @@ public class Address implements Serializable
     private String additionalInfo;
 
     @JoinColumn(name = "CityInfo_idCityInfo", referencedColumnName = "idCityInfo")
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Cityinfo cityinfo;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "address")
+    @OneToMany(mappedBy = "address")
     private Collection<Person> personCollection;
 
     public Address()

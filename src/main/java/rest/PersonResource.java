@@ -70,7 +70,7 @@ public class PersonResource {
      * @return a response code and representation of a Person
      */
     @GET
-    @Path("{address}")
+    @Path("address/{address}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPersonWithAddress(@PathParam("address") String address)
     {
@@ -94,7 +94,7 @@ public class PersonResource {
      * @return a response code and representation of a Person
      */
     @GET
-    @Path("{phoneNumber}")
+    @Path("phoneNumber/{phoneNumber}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPersonWithPhoneNumber(@PathParam("phoneNumber") String phoneNumber)
     {
@@ -106,7 +106,7 @@ public class PersonResource {
             return Response.ok(GSON.toJson(p)).build();
         } else
         {
-            throw new NoPersonException("No persons with the given address was found");
+            throw new NoPersonException("No persons with the given phone number was found");
         }
     }
     /**
@@ -117,7 +117,7 @@ public class PersonResource {
      * @return a response code and representation of a Person
      */
     @GET
-    @Path("{zipCode}")
+    @Path("zipCode/{zipCode}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPersonWithZipCode(@PathParam("zipCode") String zipCode)
     {
@@ -128,7 +128,23 @@ public class PersonResource {
             return Response.ok(GSON.toJson(p)).build();
         } else
         {
-            throw new NoPersonException("No persons with the given address was found");
+            throw new NoPersonException("No persons with the given zip was found");
+        }
+    }
+    
+    @GET
+    @Path("name/{name}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getPersonWithName(@PathParam("name") String name)
+    {
+        //Use Facade to get the person, this is just an example of the exception handling
+        List<PersonDTO> p = pf.getPersonByName(name);
+        if (p != null)
+        {
+            return Response.ok(GSON.toJson(p)).build();
+        } else
+        {
+            throw new NoPersonException("No persons with the given name was found");
         }
     }
 

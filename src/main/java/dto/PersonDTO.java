@@ -1,5 +1,6 @@
 package dto;
 
+import entity.Address;
 import entity.Hobby;
 import entity.Phone;
 import java.util.ArrayList;
@@ -26,12 +27,15 @@ public class PersonDTO {
     {
     }
 
-    public PersonDTO(String firstName, String lastName, String email, String address, List<Phone> phoneNumber, List<Hobby> hobbies)
+    public PersonDTO(String firstName, String lastName, String email, Address address, List<Phone> phoneNumber, List<Hobby> hobbies)
     {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.addressStreet = address;
+        this.addressStreet = address.getStreet();
+        this.addressAdditionalInfo = address.getAdditionalInfo();
+        this.zipcode = address.getCityinfo().getZipCode();
+        this.city = address.getCityinfo().getCity();
         this.phoneNumber = phoneNumber.stream().map(p -> p.getNumber()).collect(Collectors.toList());
         this.hobbies = hobbies.stream().map(h -> h.getName()).collect(Collectors.toList());
     }

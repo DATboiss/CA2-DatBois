@@ -58,7 +58,7 @@ public class PersonFacade
         try
         {
             p = em.createNamedQuery("SELECT dto.PersonDTO"
-                    + "(p.firstName, p.lastName, p.email, p.address.street, p.address.cityinfo, p.phoneCollection, p.hobbyCollection) "
+                    + "(p.firstName, p.lastName, p.email, p.address, p.phoneCollection, p.hobbyCollection) "
                     + "FROM Person p WHERE (SELECT ph.number FROM p.phoneCollection ph = :number)", PersonDTO.class).setParameter("number", phoneNum).getSingleResult();
         } finally
         {
@@ -78,7 +78,7 @@ public class PersonFacade
         try
         {
             persons = em.createNamedQuery("SELECT dto.PersonDTO"
-                    + "(p.firstName, p.lastName, p.email, p.address.street, p.address.cityinfo, p.phoneCollection, p.hobbyCollection) "
+                    + "(p.firstName, p.lastName, p.email, p.address, p.phoneCollection, p.hobbyCollection) "
                     + "FROM Person p WHERE p.firstName = :firstName AND p.lastName = :lastName", PersonDTO.class)
                     .setParameter("firstName", firstName).setParameter("lastName", lastName).getResultList();
         } finally
@@ -96,7 +96,8 @@ public class PersonFacade
         try
         {
             em.getTransaction().begin();
-            persons = em.createNamedQuery("SELECT dto.PersonDTO(p.firstName, p.lastName, p.email, p.address.street, p.address.cityinfo, p.phoneCollection, p.hobbyCollection) "
+            persons = em.createNamedQuery("SELECT dto.PersonDTO"
+                    + "(p.firstName, p.lastName, p.email, p.address, p.phoneCollection, p.hobbyCollection) "
                     + "FROM Person p WHERE (SELECT h.name FROM p.hobbyCollection h = :name", PersonDTO.class)
                     .setParameter("name", hobbyName).getResultList();
             em.getTransaction().commit();
@@ -149,7 +150,9 @@ public class PersonFacade
         try
         {
             em.getTransaction().begin();
-            persons = em.createQuery("SELECT dto.PersonDTO(p.firstName, p.lastName, p.email, p.address.street, p.address.cityinfo, p.phoneCollection, p.hobbyCollection) FROM Person p JOIN Address a WHERE p.address.street = :address").setParameter("address", address).getResultList();
+            persons = em.createQuery("SELECT dto.PersonDTO"
+                    + "(p.firstName, p.lastName, p.email, p.address, p.phoneCollection, p.hobbyCollection) "
+                    + "FROM Person p JOIN Address a WHERE p.address.street = :address").setParameter("address", address).getResultList();
             em.getTransaction().commit();
         } finally
         {
@@ -165,7 +168,8 @@ public class PersonFacade
 
         try
         {
-            persons = em.createNamedQuery("SELECT dto.PersonDTO(p.firstName, p.lastName, p.email, p.address.street, p.address.cityinfo, p.phoneCollection, p.hobbyCollection) "
+            persons = em.createNamedQuery("SELECT dto.PersonDTO"
+                    + "(p.firstName, p.lastName, p.email, p.address, p.phoneCollection, p.hobbyCollection) "
                     + "FROM Person p", PersonDTO.class).getResultList();
         } finally
         {

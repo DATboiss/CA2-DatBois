@@ -40,11 +40,10 @@ public class Phone implements Serializable
     {
     }
 
-    public Phone(String number, String description, Person person)
+    public Phone(String number, String description)
     {
         this.number = number;
         this.description = description;
-        this.person = person;
     }
 
     public Integer getIdPhone()

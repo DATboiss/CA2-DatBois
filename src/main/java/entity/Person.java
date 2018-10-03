@@ -45,18 +45,18 @@ public class Person implements Serializable
     @Column(name = "lastName")
     private String lastName;
 
-    @ManyToMany(mappedBy = "personCollection")
+    @ManyToMany(cascade = CascadeType.PERSIST, mappedBy = "personCollection")
     private Collection<Hobby> hobbyCollection;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "person")
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "person")
     private Collection<Phone> phoneCollection;
 
     @JoinColumns(
             {
-                @JoinColumn(name = "Address_idAddress", referencedColumnName = "idAddress", insertable = false, updatable = false)
-                , @JoinColumn(name = "Address_CityInfo_idCityInfo", referencedColumnName = "CityInfo_idCityInfo", insertable = false, updatable = false)
+                @JoinColumn(name = "Address_idAddress", referencedColumnName = "idAddress")
+                , @JoinColumn(name = "Address_CityInfo_idCityInfo", referencedColumnName = "CityInfo_idCityInfo")
             })
-    @ManyToOne(optional = false)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Address address;
 
     public Person()
@@ -123,6 +123,12 @@ public class Person implements Serializable
     {
         return hobbyCollection;
     }
+    
+    public void addHobby(Hobby hobby)
+    {
+//        hobby.addPerson(this);
+        hobbyCollection.add(hobby);
+    }
 
     public void setHobbyCollection(Collection<Hobby> hobbyCollection)
     {
@@ -132,6 +138,12 @@ public class Person implements Serializable
     public Collection<Phone> getPhoneCollection()
     {
         return phoneCollection;
+    }
+    
+    public void addPhone(Phone phone)
+    {
+//        phone.setPerson(this);
+        phoneCollection.add(phone);
     }
 
     public void setPhoneCollection(Collection<Phone> phoneCollection)

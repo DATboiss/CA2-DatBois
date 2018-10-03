@@ -1,6 +1,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -37,7 +38,7 @@ public class Cityinfo implements Serializable
     @Size(max = 45)
     @Column(name = "city")
     private String city;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cityinfo")
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "cityinfo")
     private Collection<Address> addressCollection;
 
     public Cityinfo()
@@ -48,6 +49,7 @@ public class Cityinfo implements Serializable
     {
         this.zipCode = zipCode;
         this.city = city;
+        this.addressCollection = new ArrayList();
     }
 
     public Integer getIdCityInfo()
@@ -78,6 +80,11 @@ public class Cityinfo implements Serializable
     public Collection<Address> getAddressCollection()
     {
         return addressCollection;
+    }
+   
+    public void addAddress(Address a)
+    {
+        addressCollection.add(a);
     }
 
     public void setAddressCollection(Collection<Address> addressCollection)

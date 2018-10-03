@@ -1,8 +1,10 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -48,18 +50,18 @@ public class Hobby implements Serializable {
         , @JoinColumn(name = "Person_Address_idAddress", referencedColumnName = "Address_idAddress")
         , @JoinColumn(name = "Person_Address_CityInfo_idCityInfo", referencedColumnName = "Address_CityInfo_idCityInfo")
     })
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.PERSIST)
     private Collection<Person> personCollection;
 
     public Hobby()
     {
     }
 
-    public Hobby(String name, String description, Collection<Person> personCollection)
+    public Hobby(String name, String description)
     {
         this.name = name;
         this.description = description;
-        this.personCollection = personCollection;
+        this.personCollection = new ArrayList();
     }
 
     public Integer getIdHobby()
@@ -90,6 +92,11 @@ public class Hobby implements Serializable {
     public Collection<Person> getPersonCollection()
     {
         return personCollection;
+    }
+    
+    public void addPerson(Person person)
+    {
+        personCollection.add(person);
     }
 
     public void setPersonCollection(Collection<Person> personCollection)
