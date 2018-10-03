@@ -15,7 +15,7 @@ addPhone.addEventListener("click", addPhoneToList);
 searchBtn.addEventListener("click", getPerson);
 addedPhones.addEventListener("click", removePhone);
 
-var URL = "http://localhost:3333/api/person";
+var URL = "http://localhost:8080/CA2/api/person";
 function makeOptions(method, body) {
     var opts = {
         method: method,
@@ -48,21 +48,21 @@ function getPerson() {
 }
 
 function postPerson() {
-    var firstName = document.getElementById("firstName");
-    var lastName = document.getElementById("lastName");
-    var email = document.getElementById("email");
-    var street = document.getElementById("street");
-    var additionalInfo = document.getElementById("additionalInfo");
-    var zipCode = document.getElementById("zipCode");
-    var city = document.getElementById("city");
-    var hobby = document.getElementById("hobbyName");
-    var hobbyDesc = document.getElementById("hobbyDescription");
+    var firstName = document.getElementById("firstName").value;
+    var lastName = document.getElementById("lastName").value;
+    var email = document.getElementById("email").value;
+    var street = document.getElementById("street").value;
+    var additionalInfo = document.getElementById("additionalInfo").value;
+    var zipCode = document.getElementById("zipCode").value;
+    var city = document.getElementById("city").value;
+    var hobby = "WoW"//document.getElementById("hobbyName");
+    var hobbyDesc = "Gamez"//document.getElementById("hobbyDescription");
     var p = {
         firstName: firstName,
         lastName: lastName,
         email: email,
-        phone: phoneNumbers,
-        address: {
+        Phone: phoneNumbers,
+        Address: {
             street: street,
             additionalInfo: additionalInfo,
             Cityinfo: {
@@ -70,11 +70,12 @@ function postPerson() {
                 city: city
             }
         },
-        hobby: {
+        Hobby: {
             name: hobby,
             description: hobbyDesc
         }
     }
+    console.log(p);
     fetch(URL + "/", makeOptions("POST", p))
     .then(handleHttpErrors)
     .then(data => console.log(data))
