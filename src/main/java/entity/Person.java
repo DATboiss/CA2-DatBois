@@ -39,6 +39,9 @@ import javax.validation.constraints.Size;
     , @NamedQuery(name = "Person.findByPhoneNumber", query = "SELECT dto.PersonDTO"
             + "(p.firstName, p.lastName, p.email, p.address.street, p.address.cityinfo, p.phoneCollection, p.hobbyCollection) "
             + "FROM Person p WHERE (SELECT ph.number FROM p.phoneCollection ph = :number)")
+    , @NamedQuery(name = "Person.findByName", query = "SELECT dto.PersonDTO"
+            + "(p.firstName, p.lastName, p.email, p.address.street, p.address.cityinfo, p.phoneCollection, p.hobbyCollection) "
+            + "FROM Person p WHERE p.firstName = :firstName AND p.lastName = :lastName")
 })
 public class Person implements Serializable {
 
