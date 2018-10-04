@@ -107,4 +107,12 @@ public class Address implements Serializable
         this.personCollection = personCollection;
     }
 
+    @Override
+    public String toString()
+    {
+        return "Address{" + "idAddress=" + idAddress + ", street=" + street + ", additionalInfo=" + additionalInfo + ", cityinfo=" + cityinfo + ", personCollection=" + personCollection + '}';
+    }
+    
+    
+
 }

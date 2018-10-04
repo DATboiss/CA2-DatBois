@@ -94,4 +94,10 @@ public class Cityinfo implements Serializable
         this.addressCollection = addressCollection;
     }
 
+    @Override
+    public String toString()
+    {
+        return "Cityinfo{" + "idCityInfo=" + idCityInfo + ", zipCode=" + zipCode + ", city=" + city + ", addressCollection=" + addressCollection + '}';
+    }
+
 }

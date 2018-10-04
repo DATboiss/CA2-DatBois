@@ -11,6 +11,8 @@
     <h2>DatKrak</h2>
     <input type="text" id="searchField" placeholder="Enter a name, phone number or address" style="width: 50vw">
     <input type="submit" id="searchBtn" value="Search">
+    <input type="submit" id="hobbyBtn" value="Find hobby">
+    <input type="submit" id="zipcodeBtn" value="Find Zip Codes">
   </div>
 
   <!-- Button trigger modal -->
@@ -33,6 +35,9 @@
             <div class="form-group">
               <label for="recipient-name" class="col-form-label">id:</label>
               <input type="text" class="form-control" id="id" placeholder="Only required if you want to update or delete">
+              <button type="button" class="btn btn-primary" id="getPersonBtn">Get info</button>
+              <button type="button" class="btn btn-primary" id="deletePersonBtn">Delete person</button><br>
+
               <label for="message-text" class="col-form-label">First name:</label>
               <input type="text" class="form-control" id="firstName">
               <label for="message-text" class="col-form-label">Last name:</label>

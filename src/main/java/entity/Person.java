@@ -163,4 +163,20 @@ public class Person implements Serializable
         this.address = address;
     }
 
+    @Override
+    public String toString()
+    {
+        String s = "Person{" + "idPerson=" + idPerson + ",\n email=" + email + ", \nfirstName=" + firstName + ", \nlastName=" + lastName + ", \nhobbyCollection=";
+        for (Hobby hobby : hobbyCollection)
+        {
+            s+= hobby + "\n";
+        }
+        for (Phone  phone : phoneCollection)
+        {
+            s+= phone + "\n";
+        }
+        s += ", address=" + address + '}';
+        return s;
+    }
+    
 }

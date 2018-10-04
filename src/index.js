@@ -7,15 +7,23 @@ var addPhone = document.getElementById("addPhone");
 var addedPhones = document.getElementById("addedPhones");
 var phoneError = document.getElementById("phoneError");
 var postButton = document.getElementById("postButton");
+var getPersonBtn = document.getElementById("getPersonBtn");
+var deletePersonBtn = document.getElementById("deletePersonBtn");
+var hobbyBtn = document.getElementById("hobbyBtn");
+var zipcodeBtn = document.getElementById("zipcodeBtn");
+var phoneNumbers = [];
+
 
 postButton.addEventListener("click", postPerson)
-
-var phoneNumbers = [];
 addPhone.addEventListener("click", addPhoneToList);
 searchBtn.addEventListener("click", getPerson);
 addedPhones.addEventListener("click", removePhone);
+getPersonBtn.addEventListener("click", personInfoToForm);
+deletePersonBtn.addEventListener("click", deletePerson);
+hobbyBtn.addEventListener("click", getHobbies);
+zipcodeBtn.addEventListener("click", getZipCodes)
 
-var URL = "http://localhost:8080/CA2/api/person";
+var URL = "http://localhost:8080/CA2/api/person/";
 function makeOptions(method, body) {
     var opts = {
         method: method,
@@ -65,7 +73,7 @@ function postPerson() {
         address: {
             street: street,
             additionalInfo: additionalInfo,
-            Cityinfo: {
+            cityinfo: {
                 zipCode: zipCode,
                 city: city
             },
@@ -76,17 +84,63 @@ function postPerson() {
         }]
     }
     console.log(p);
-    fetch(URL + "/", makeOptions("POST", p))
+    fetch(URL, makeOptions("POST", p))
+        .then(handleHttpErrors)
+        .then(data => console.log(data))
+        .catch(err => {
+            if (err.httpError) {
+                err.fullError.then(e => console.log(e.message))
+            }
+            else {
+                console.log("Network error")
+            }
+        })
+}
+function deletePerson() {
+    var id = document.getElementById("id").value;
+    fetch(URL + id, makeOptions("DELETE"))
+        .then(handleHttpErrors)
+        .then(data => console.log(data))
+        .catch(err => {
+            if (err.httpError) {
+                err.fullError.then(e => console.log(e.message))
+            }
+            else {
+                console.log("Network error")
+            }
+        })
+
+}
+
+function getHobbies()
+{
+    fetch(URL + "hobby/" + searchField.value)
     .then(handleHttpErrors)
-    .then(data => console.log(data))
+    .then(dataToTable)
     .catch(err => {
         if (err.httpError) {
-            err.fullError.then(e => console.log(e.message))
+            err.fullError.then(e => console.log(e));
         }
         else {
-            console.log("Network error")
+            console.log("Network error");
         }
     })
+}
+
+function getZipCodes()
+{
+    fetch(URL + "zipCode/" + searchField.value)
+    .then(handleHttpErrors)
+    //TODO create table with only city & zip code
+    .then(dataToTable)
+    .catch(err => {
+        if (err.httpError) {
+            err.fullError.then(e => console.log(e));
+        }
+        else {
+            console.log("Network error");
+        }
+    }) 
 }
 
 //Used to determine which REST method will be called
@@ -117,6 +171,33 @@ function getSearchValue(pathParameter) {
     return pathParameter;
 }
 
+//Inserts persons information into the form values
+function personInfoToForm() {
+    var id = document.getElementById("id").value;
+    fetch(URL + id)
+        .then(handleHttpErrors)
+        .then(dataToForm)
+        .catch(err => {
+            if (err.httpError) {
+                err.fullError.then(e => console.log(e));
+            }
+            else {
+                console.log("Network error");
+            }
+        })
+
+    function dataToForm(data) {
+        console.log(data);
+        document.getElementById("firstName").value = data.firstName;
+        document.getElementById("lastName").value = data.lastName;
+        document.getElementById("email").value = data.email;
+        document.getElementById("street").value = data.addressStreet;
+        document.getElementById("additionalInfo").value = data.addressAdditionalInfo;
+        document.getElementById("zipCode").value = data.zipcode;
+        document.getElementById("city").value = data.city;
+    }
+}
+
 function addPhoneToList() {
     var phoneNumber = document.getElementById("phone").value;
     var phoneDesc = document.getElementById("phoneDesc").value;
@@ -124,8 +205,7 @@ function addPhoneToList() {
         number: phoneNumber,
         description: phoneDesc
     }
-    if (!phoneNumbers.filter(p => p.number == phoneNumber).length > 0)
-    {
+    if (!phoneNumbers.filter(p => p.number == phoneNumber).length > 0) {
         phoneNumbers.push(phone);
         phonesToHTML(phoneNumbers);
         phoneError.innerText = "";
@@ -157,7 +237,6 @@ function dataToTable(data) {
     tableBody.innerHTML = data.map(data => "<tr><td>" + data.firstName + " " + data.lastName + "</td>"
         + "<td>" + data.email + "</td><td>" + data.phoneNumber.join("\n") + "</td><td>" + data.address + "</td><td>"
         + data.city + "</td><td>" + data.zipCode + "</td><td>" + data.hobbies.join("\n") + "</td>");
-        console.log(data);
 }
 
 
