@@ -55,16 +55,5 @@ public class AddressFacade
 
     }
     
-    public Cityinfo getCityInfofromZip(String zipCode)
-    {
-        EntityManager em = getEntityManager();
-        try
-        {
-            Cityinfo ci = em.createQuery("SELECT c FROM Cityinfo c WHERE c.zipCode = :zipCode", Cityinfo.class).setParameter("zipCode", zipCode).getSingleResult();
-            return ci;
-        } finally
-        {
-            em.close();
-        }
-    }
+  
 }

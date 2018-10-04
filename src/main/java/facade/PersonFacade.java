@@ -26,7 +26,8 @@ public class PersonFacade
     public Person addPerson(Person p)
     {
         EntityManager em = emf.createEntityManager();
-        Cityinfo ci = af.getCityInfofromZip(p.getAddress().getCityinfo().getZipCode());
+        String zipCode = p.getAddress().getCityinfo().getZipCode();
+        Cityinfo ci = em.createQuery("SELECT c FROM Cityinfo c WHERE c.zipCode = :zipCode", Cityinfo.class).setParameter("zipCode", zipCode).getSingleResult();
         p.getAddress().setCityinfo(ci);
         try
         {
@@ -39,6 +40,7 @@ public class PersonFacade
         }
         return p;
     }
+
 
     public PersonDTO getPerson(int id)
     {
@@ -180,7 +182,8 @@ public class PersonFacade
     public Person editPerson(Person p)
     {
         EntityManager em = emf.createEntityManager();
-        Cityinfo ci = af.getCityInfofromZip(p.getAddress().getCityinfo().getZipCode());
+        String zipCode = p.getAddress().getCityinfo().getZipCode();
+        Cityinfo ci = em.createQuery("SELECT c FROM Cityinfo c WHERE c.zipCode = :zipCode", Cityinfo.class).setParameter("zipCode", zipCode).getSingleResult();
         p.getAddress().setCityinfo(ci);
 
         try
@@ -212,7 +215,7 @@ public class PersonFacade
         }
         return p;
     }
-    
+
     public List<PersonDTO> getPersonByHobby(String Hobby)
     {
         EntityManager em = emf.createEntityManager();
@@ -227,7 +230,7 @@ public class PersonFacade
         }
         return persons;
     }
-    
+
     public List<Hobby> getAllHobbies()
     {
         EntityManager em = emf.createEntityManager();

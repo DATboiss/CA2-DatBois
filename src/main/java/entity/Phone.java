@@ -1,6 +1,7 @@
 package entity;
 
 import java.io.Serializable;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -32,8 +33,8 @@ public class Phone implements Serializable
     @Column(name = "description")
     private String description;
 
-    @JoinColumn(name = "Person_idPerson", referencedColumnName = "idPerson", insertable = false, updatable = false)
-    @ManyToOne(optional = false)
+    @JoinColumn(name = "Person_idPerson", referencedColumnName = "idPerson")
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Person person;
 
     public Phone()

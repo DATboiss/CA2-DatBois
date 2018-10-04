@@ -64,7 +64,8 @@ public class PersonFacadeTest
         Hobby h3 = new Hobby("Håndbold", "Stor sport");
         Phone p1 = new Phone("25582940", "Mobil");
         Phone p2 = new Phone("88888888", "Arbejde");
-        Address a = new Address("Hasselhøj", "108");
+        Cityinfo ci = new Cityinfo("2990", "nivå");
+        Address a = new Address("Hasselhøj", "108", ci);
         Person p = new Person("Test@gmail.com", "Emil", "Hermansen", new ArrayList(), new ArrayList(), a);
         
         p.addHobby(h1);

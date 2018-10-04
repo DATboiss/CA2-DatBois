@@ -49,10 +49,11 @@ public class Address implements Serializable
     {
     }
 
-    public Address(String street, String additionalInfo)
+    public Address(String street, String additionalInfo, Cityinfo cityinfo)
     {
         this.street = street;
         this.additionalInfo = additionalInfo;
+        this.cityinfo = cityinfo;
     }
 
     public Integer getIdAddress()
