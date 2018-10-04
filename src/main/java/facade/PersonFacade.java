@@ -84,9 +84,7 @@ public class PersonFacade
 
         try
         {
-            persons = em.createQuery("SELECT dto.PersonDTO"
-                    + "(p.firstName, p.lastName, p.email, p.address, p.phoneCollection, p.hobbyCollection) "
-                    + "FROM Person p WHERE p.firstName = :firstName AND p.lastName = :lastName", PersonDTO.class)
+            persons = em.createQuery("SELECT NEW dto.PersonDTO(p) FROM Person p WHERE p.firstName = :firstName AND p.lastName = :lastName", PersonDTO.class)
                     .setParameter("firstName", firstName).setParameter("lastName", lastName).getResultList();
         } finally
         {
@@ -102,9 +100,7 @@ public class PersonFacade
 
         try
         {
-            persons = em.createQuery("SELECT dto.PersonDTO"
-                    + "(p.firstName, p.lastName, p.email, p.address, p.phoneCollection, p.hobbyCollection) "
-                    + "FROM Person p WHERE (SELECT h.name FROM p.hobbyCollection h = :name", PersonDTO.class)
+            persons = em.createQuery("SELECT NEW dto.PersonDTO(p) FROM Person p JOIN Hobby h WHERE h.name = :name", PersonDTO.class)
                     .setParameter("name", hobbyName).getResultList();
         } finally
         {
@@ -121,7 +117,7 @@ public class PersonFacade
 
         try
         {
-            count = (int) em.createQuery("SELECT COUNT(p) FROM Person p WHERE (SELECT h.name FROM p.hobbyCollection h = :hobbyName)")
+            count = (int) em.createQuery("SELECT COUNT(p) FROM Person p JOIN Hobby h WHERE h.name = :hobbyName")
                     .setParameter("hobbyName", hobbyName).getSingleResult();
         } finally
         {
@@ -137,7 +133,7 @@ public class PersonFacade
 
         try
         {
-            persons = em.createQuery("SELECT p FROM Person p JOIN Address JOIN Cityinfo c WHERE p.address.cityinfo.zipCode = :zipCode", PersonDTO.class).setParameter("zipCode", zipCode).getResultList();
+            persons = em.createQuery("SELECT NEW dto.PersonDTO(p) FROM Person p JOIN Address JOIN Cityinfo c WHERE p.address.cityinfo.zipCode = :zipCode", PersonDTO.class).setParameter("zipCode", zipCode).getResultList();
         } finally
         {
             em.close();
@@ -152,9 +148,7 @@ public class PersonFacade
 
         try
         {
-            persons = em.createQuery("SELECT dto.PersonDTO"
-                    + "(p.firstName, p.lastName, p.email, p.address, p.phoneCollection, p.hobbyCollection) "
-                    + "FROM Person p JOIN Address a WHERE p.address.street = :address").setParameter("address", address).getResultList();
+            persons = em.createQuery("SELECT NEW dto.PersonDTO(p) FROM Person p JOIN Address a WHERE p.address.street = :address").setParameter("address", address).getResultList();
         } finally
         {
             em.close();
@@ -169,9 +163,7 @@ public class PersonFacade
 
         try
         {
-            persons = em.createQuery("SELECT dto.PersonDTO"
-                    + "(p.firstName, p.lastName, p.email, p.address, p.phoneCollection, p.hobbyCollection) "
-                    + "FROM Person p", PersonDTO.class).getResultList();
+            persons = em.createQuery("SELECT NEW dto.PersonDTO(p) FROM Person p", PersonDTO.class).getResultList();
         } finally
         {
             em.close();
@@ -223,7 +215,8 @@ public class PersonFacade
 
         try
         {
-            persons = em.createQuery("SELECT dto.PersonDTO(p.firstName, p.lastName, p.email, p.address.street, p.address.cityinfo, p.phoneCollection, p.hobbyCollection) FROM Person p JOIN Hobby h WHERE h.name = :hobbyName").setParameter("hobbyName", Hobby).getResultList();
+            persons = em.createQuery("SELECT NEW dto.PersonDTO(p) FROM Person p JOIN Hobby h WHERE h.name = :hobbyName")
+                    .setParameter("hobbyName", Hobby).getResultList();
         } finally
         {
             em.close();

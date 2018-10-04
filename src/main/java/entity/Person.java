@@ -50,6 +50,7 @@ public class Person implements Serializable
     @ManyToMany(cascade = CascadeType.PERSIST, mappedBy = "personCollection", fetch = FetchType.EAGER)
     private Collection<Hobby> hobbyCollection = new ArrayList();
 
+    @JoinColumn(name = "Phone_idPhone", referencedColumnName = "idPhone")
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "person", fetch = FetchType.EAGER)
     private Collection<Phone> phoneCollection = new ArrayList();
 
@@ -58,7 +59,7 @@ public class Person implements Serializable
                 @JoinColumn(name = "Address_idAddress", referencedColumnName = "idAddress")
                 , @JoinColumn(name = "Address_CityInfo_idCityInfo", referencedColumnName = "CityInfo_idCityInfo")
             })
-    @JoinColumn(name = "Phone_idPhone", referencedColumnName = "idPhone")
+    
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private Address address;
 

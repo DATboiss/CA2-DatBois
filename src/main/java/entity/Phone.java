@@ -33,7 +33,7 @@ public class Phone implements Serializable
     @Column(name = "description")
     private String description;
 
-    
+    @JoinColumn(name = "Person_idPerson", referencedColumnName = "idPerson")
     @ManyToOne(cascade = CascadeType.PERSIST)
     private Person person;
 
