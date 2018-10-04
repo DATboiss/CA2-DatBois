@@ -152,20 +152,20 @@ function getSearchValue(pathParameter) {
         searchParameter = searchParameter.toLowerCase();
         //if the search box contains a number
         if (hasNumber.test(searchParameter)) {
-            pathParameter = "/address/" + searchParameter;
+            pathParameter = "address/" + searchParameter;
         }
         else {
-            pathParameter = "/name/" + searchParameter;
+            pathParameter = "name/" + searchParameter;
         }
     }
 
     if (!isNaN(searchParameter)) {
         var numberToString = searchParameter.toString();
         if (numberToString.length == 3 || numberToString.length == 4) {
-            pathParameter = "/zipCode/" + searchParameter;
+            pathParameter = "zipCode/" + searchParameter;
         }
         else {
-            pathParameter = "/phoneNumber/" + searchParameter;
+            pathParameter = "phoneNumber/" + searchParameter;
         }
     }
     return pathParameter;
