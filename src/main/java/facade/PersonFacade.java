@@ -1,6 +1,7 @@
 package facade;
 
 import dto.PersonDTO;
+import entity.Cityinfo;
 import entity.Hobby;
 import entity.Person;
 import java.util.List;
@@ -15,6 +16,7 @@ public class PersonFacade
 {
 
     private EntityManagerFactory emf;
+    private AddressFacade af = new AddressFacade(emf);
 
     public PersonFacade(EntityManagerFactory emf)
     {
@@ -24,6 +26,8 @@ public class PersonFacade
     public Person addPerson(Person p)
     {
         EntityManager em = emf.createEntityManager();
+        Cityinfo ci = af.getCityInfofromZip(p.getAddress().getCityinfo().getZipCode());
+        p.getAddress().setCityinfo(ci);
         try
         {
             em.getTransaction().begin();
@@ -96,12 +100,10 @@ public class PersonFacade
 
         try
         {
-            em.getTransaction().begin();
             persons = em.createNamedQuery("SELECT dto.PersonDTO"
                     + "(p.firstName, p.lastName, p.email, p.address, p.phoneCollection, p.hobbyCollection) "
                     + "FROM Person p WHERE (SELECT h.name FROM p.hobbyCollection h = :name", PersonDTO.class)
                     .setParameter("name", hobbyName).getResultList();
-            em.getTransaction().commit();
         } finally
         {
             em.close();
@@ -178,6 +180,8 @@ public class PersonFacade
     public Person editPerson(Person p)
     {
         EntityManager em = emf.createEntityManager();
+        Cityinfo ci = af.getCityInfofromZip(p.getAddress().getCityinfo().getZipCode());
+        p.getAddress().setCityinfo(ci);
 
         try
         {
