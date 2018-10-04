@@ -58,7 +58,7 @@ public class PersonFacade
         return p;
     }
     
-    public PersonDTO getPerson(String id)
+    public PersonDTO getPerson(int id)
     {
         EntityManager em = emf.createEntityManager();
         PersonDTO p = null;
