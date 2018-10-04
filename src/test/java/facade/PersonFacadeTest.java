@@ -112,22 +112,22 @@ public class PersonFacadeTest
         assertNotNull(result);
         // TODO review the generated test code and remove the default call to fail.
     }
-//
-//    /**
-//     * Test of getPersonByName method, of class PersonFacade.
-//     */
-//    @Test
-//    public void testGetPersonByName()
-//    {
-//        System.out.println("getPersonByName");
-//        String name = "";
-//        PersonFacade instance = null;
-//        List<PersonDTO> expResult = null;
-//        List<PersonDTO> result = instance.getPersonByName(name);
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
+
+    /**
+     * Test of getPersonByName method, of class PersonFacade.
+     */
+    @Test
+    public void testGetPersonByName()
+    {
+        System.out.println("getPersonByName");
+        String name = "";
+        PersonFacade instance = null;
+        List<PersonDTO> expResult = null;
+        List<PersonDTO> result = instance.getPersonByName(name);
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
 //
 //    /**
 //     * Test of getPersonsByHobby method, of class PersonFacade.
