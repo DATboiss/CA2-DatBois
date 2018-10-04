@@ -7,6 +7,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -38,7 +39,7 @@ public class Cityinfo implements Serializable
     @Size(max = 45)
     @Column(name = "city")
     private String city;
-    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "cityinfo")
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "cityinfo", fetch = FetchType.EAGER)
     private Collection<Address> addressCollection;
 
     public Cityinfo()
@@ -84,6 +85,7 @@ public class Cityinfo implements Serializable
    
     public void addAddress(Address a)
     {
+        a.setCityinfo(this);
         addressCollection.add(a);
     }
 

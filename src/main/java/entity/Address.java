@@ -6,6 +6,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -39,10 +40,10 @@ public class Address implements Serializable
     private String additionalInfo;
 
     @JoinColumn(name = "CityInfo_idCityInfo", referencedColumnName = "idCityInfo")
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Cityinfo cityinfo;
     
-    @OneToMany(mappedBy = "address")
+    @OneToMany(mappedBy = "address", fetch = FetchType.EAGER)
     private Collection<Person> personCollection;
 
     public Address()
@@ -94,6 +95,11 @@ public class Address implements Serializable
     public Collection<Person> getPersonCollection()
     {
         return personCollection;
+    }
+    public void addPerson(Person p)
+    {
+        p.setAddress(this);
+        personCollection.add(p);
     }
 
     public void setPersonCollection(Collection<Person> personCollection)

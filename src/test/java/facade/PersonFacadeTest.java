@@ -66,22 +66,17 @@ public class PersonFacadeTest
         Phone p2 = new Phone("88888888", "Arbejde");
         Cityinfo ci = new Cityinfo("2990", "nivå");
         Address a = new Address("Hasselhøj", "108", ci);
-        Person p = new Person("Test@gmail.com", "Emil", "Hermansen", new ArrayList(), new ArrayList(), a);
+        Person p = new Person("Test@gmail.com", "Emil", "Hermansen", a);
         
         p.addHobby(h1);
-        h1.addPerson(p);
         
         p.addHobby(h2);
-        h2.addPerson(p);
         
         p.addHobby(h3);
-        h3.addPerson(p);
         
         p.addPhone(p1);
-//        p1.setPerson(p);
         
         p.addPhone(p2);
-//        p2.setPerson(p);
         
         PersonFacade instance = new PersonFacade(Persistence.createEntityManagerFactory("pu"));
         Person expResult = p;
@@ -96,30 +91,27 @@ public class PersonFacadeTest
 //    public void testGetPerson()
 //    {
 //        System.out.println("getPerson");
-//        int id = 0;
-//        PersonFacade instance = null;
-//        PersonDTO expResult = null;
+//        PersonFacade instance = new PersonFacade(Persistence.createEntityManagerFactory("pu"));
+//        
+//        int id = 1;
 //        PersonDTO result = instance.getPerson(id);
-//        assertEquals(expResult, result);
+//        assertNotNull(result);
 //        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
 //    }
-//
-//    /**
-//     * Test of getPersonByPhoneNumber method, of class PersonFacade.
-//     */
-//    @Test
-//    public void testGetPersonByPhoneNumber()
-//    {
-//        System.out.println("getPersonByPhoneNumber");
-//        String phoneNum = "";
-//        PersonFacade instance = null;
-//        PersonDTO expResult = null;
-//        PersonDTO result = instance.getPersonByPhoneNumber(phoneNum);
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
+
+    /**
+     * Test of getPersonByPhoneNumber method, of class PersonFacade.
+     */
+    @Test
+    public void testGetPersonByPhoneNumber()
+    {
+        System.out.println("getPersonByPhoneNumber");
+        String phoneNum = "25582940";
+        PersonFacade instance = new PersonFacade(Persistence.createEntityManagerFactory("pu"));
+        PersonDTO result = instance.getPersonByPhoneNumber(phoneNum);
+        assertNotNull(result);
+        // TODO review the generated test code and remove the default call to fail.
+    }
 //
 //    /**
 //     * Test of getPersonByName method, of class PersonFacade.

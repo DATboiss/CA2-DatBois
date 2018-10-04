@@ -2,10 +2,12 @@ package entity;
 
 import dto.PersonDTO;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -45,31 +47,31 @@ public class Person implements Serializable
     @Column(name = "lastName")
     private String lastName;
 
-    @ManyToMany(cascade = CascadeType.PERSIST, mappedBy = "personCollection")
-    private Collection<Hobby> hobbyCollection;
+    @ManyToMany(cascade = CascadeType.PERSIST, mappedBy = "personCollection", fetch = FetchType.EAGER)
+    private Collection<Hobby> hobbyCollection = new ArrayList();
 
-    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "person")
-    private Collection<Phone> phoneCollection;
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "person", fetch = FetchType.EAGER)
+    private Collection<Phone> phoneCollection = new ArrayList();
 
     @JoinColumns(
             {
                 @JoinColumn(name = "Address_idAddress", referencedColumnName = "idAddress")
                 , @JoinColumn(name = "Address_CityInfo_idCityInfo", referencedColumnName = "CityInfo_idCityInfo")
             })
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private Address address;
 
     public Person()
     {
     }
 
-    public Person(String email, String firstName, String lastName, Collection<Hobby> hobbyCollection, Collection<Phone> phoneCollection, Address address)
+    public Person(String email, String firstName, String lastName, Address address)
     {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.hobbyCollection = hobbyCollection;
-        this.phoneCollection = phoneCollection;
+//        this.hobbyCollection = hobbyCollection;
+//        this.phoneCollection = phoneCollection;
         this.address = address;
     }
     
@@ -126,7 +128,7 @@ public class Person implements Serializable
     
     public void addHobby(Hobby hobby)
     {
-//        hobby.addPerson(this);
+        hobby.addPerson(this);
         hobbyCollection.add(hobby);
     }
 

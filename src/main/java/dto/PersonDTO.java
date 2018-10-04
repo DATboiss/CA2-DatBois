@@ -2,8 +2,10 @@ package dto;
 
 import entity.Address;
 import entity.Hobby;
+import entity.Person;
 import entity.Phone;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -11,8 +13,9 @@ import java.util.stream.Collectors;
  *
  * @author adams
  */
-public class PersonDTO {
-    
+public class PersonDTO
+{
+
     private String firstName;
     private String lastName;
     private String email;
@@ -27,17 +30,17 @@ public class PersonDTO {
     {
     }
 
-    public PersonDTO(String firstName, String lastName, String email, Address address, List<Phone> phoneNumber, List<Hobby> hobbies)
+    public PersonDTO(Person p)
     {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.addressStreet = address.getStreet();
-        this.addressAdditionalInfo = address.getAdditionalInfo();
-        this.zipcode = address.getCityinfo().getZipCode();
-        this.city = address.getCityinfo().getCity();
-        this.phoneNumber = phoneNumber.stream().map(p -> p.getNumber()).collect(Collectors.toList());
-        this.hobbies = hobbies.stream().map(h -> h.getName()).collect(Collectors.toList());
+        this.firstName = p.getFirstName();
+        this.lastName = p.getLastName();
+        this.email = p.getEmail();
+        this.addressStreet = p.getAddress().getStreet();
+        this.addressAdditionalInfo = p.getAddress().getAdditionalInfo();
+        this.zipcode = p.getAddress().getCityinfo().getZipCode();
+        this.city = p.getAddress().getCityinfo().getCity();
+        this.phoneNumber = p.getPhoneCollection().stream().map(pho -> pho.getNumber()).collect(Collectors.toList());
+        this.hobbies = p.getHobbyCollection().stream().map(hob -> hob.getName()).collect(Collectors.toList());
     }
 
     public String getFirstName()
@@ -130,7 +133,4 @@ public class PersonDTO {
         this.city = city;
     }
 
-    
-    
-    
 }

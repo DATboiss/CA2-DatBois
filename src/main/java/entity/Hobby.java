@@ -7,6 +7,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -50,7 +51,7 @@ public class Hobby implements Serializable {
         , @JoinColumn(name = "Person_Address_idAddress", referencedColumnName = "Address_idAddress")
         , @JoinColumn(name = "Person_Address_CityInfo_idCityInfo", referencedColumnName = "Address_CityInfo_idCityInfo")
     })
-    @ManyToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private Collection<Person> personCollection;
 
     public Hobby()
