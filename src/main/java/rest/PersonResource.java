@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dto.PersonDTO;
 import entity.Person;
+import facade.AddressFacade;
 import facade.PersonFacade;
 import java.util.List;
 import javax.persistence.EntityManagerFactory;
@@ -31,6 +32,7 @@ public class PersonResource {
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private PersonFacade pf = new PersonFacade(Persistence.createEntityManagerFactory("pu"));
+    private AddressFacade af = new AddressFacade(Persistence.createEntityManagerFactory("pu"));
     @Context
     private UriInfo context;
 
@@ -123,7 +125,7 @@ public class PersonResource {
     {
         //Use Facade to get the person, this is just an example of the exception handling
         List<PersonDTO> p = null;
-        p = pf.getPersonsByCity(zipCode);
+        p = af.getPersonFromZip(zipCode);
         if (p != null)
         {
             return Response.ok(GSON.toJson(p)).build();

@@ -1,5 +1,6 @@
 package facade;
 
+import dto.PersonDTO;
 import entity.Cityinfo;
 import entity.Person;
 import java.util.List;
@@ -26,13 +27,14 @@ public class AddressFacade
         return emf.createEntityManager();
     }
 
-    public List<Person> getPersonFromZip(String zip)
+    public List<PersonDTO> getPersonFromZip(String zip)
     {
         EntityManager em = getEntityManager();
+        
         try
         {
             em.getTransaction().begin();
-            Query persons = em.createQuery("SELECT p FROM Person p JOIN Address a JOIN Cityinfo c WHERE p.address.cityinfo.zipcode = :zip");
+            Query persons = em.createQuery("SELECT p FROM Person p JOIN Address a JOIN Cityinfo c WHERE p.address.cityinfo.zipCode = :zip");
             persons.setParameter("zip", zip);
             em.getTransaction().commit();
             return persons.getResultList();
