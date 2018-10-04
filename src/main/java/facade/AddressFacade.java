@@ -31,10 +31,8 @@ public class AddressFacade
         EntityManager em = getEntityManager();
         try
         {
-            em.getTransaction().begin();
             Query persons = em.createQuery("SELECT p FROM Person p JOIN Address a JOIN Cityinfo c WHERE p.address.cityinfo.zipcode = :zip");
             persons.setParameter("zip", zip);
-            em.getTransaction().commit();
             return persons.getResultList();
         } finally
         {
@@ -48,14 +46,25 @@ public class AddressFacade
         EntityManager em = getEntityManager();
         try
         {
-            em.getTransaction().begin();
             Query zipcodes = em.createQuery("SELECT c.city FROM Cityinfo c");
-            em.getTransaction().commit();
             return zipcodes.getResultList();
         } finally
         {
             em.close();
         }
 
+    }
+    
+    public Cityinfo getCityInfofromZip(String zipCode)
+    {
+        EntityManager em = getEntityManager();
+        try
+        {
+            Cityinfo ci = em.createQuery("SELECT c FROM Cityinfo c WHERE c.zipCode = :zipCode", Cityinfo.class).setParameter("zipCode", zipCode).getSingleResult();
+            return ci;
+        } finally
+        {
+            em.close();
+        }
     }
 }
