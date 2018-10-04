@@ -58,6 +58,7 @@ public class Person implements Serializable
                 @JoinColumn(name = "Address_idAddress", referencedColumnName = "idAddress")
                 , @JoinColumn(name = "Address_CityInfo_idCityInfo", referencedColumnName = "CityInfo_idCityInfo")
             })
+    @JoinColumn(name = "Phone_idPhone", referencedColumnName = "idPhone")
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private Address address;
 
@@ -70,8 +71,6 @@ public class Person implements Serializable
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
-//        this.hobbyCollection = hobbyCollection;
-//        this.phoneCollection = phoneCollection;
         this.address = address;
     }
     
