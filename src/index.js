@@ -61,32 +61,60 @@ function postPerson() {
         firstName: firstName,
         lastName: lastName,
         email: email,
-        Phone: phoneNumbers,
-        Address: {
+        phoneCollection: phoneNumbers,
+        address: {
             street: street,
             additionalInfo: additionalInfo,
             Cityinfo: {
                 zipCode: zipCode,
                 city: city
-            }
+            },
         },
-        Hobby: {
+        hobbyCollection: [{
             name: hobby,
             description: hobbyDesc
-        }
+        }]
     }
-    console.log(JSON.stringify(p));
-    fetch(URL + "/", makeOptions("POST", JSON.stringify(p)))
+    console.log(p);
+    fetch(URL + "/", makeOptions("POST", p))
     .then(handleHttpErrors)
     .then(data => console.log(data))
     .catch(err => {
         if (err.httpError) {
-            err.fullError.then(e => console.log(e))
+            err.fullError.then(e => console.log(e.message))
         }
         else {
             console.log("Network error")
         }
     })
+}
+
+//Used to determine which REST method will be called
+function getSearchValue(pathParameter) {
+    var searchParameter = searchField.value
+    //If the value in the search box can not be converted to a number
+    if (isNaN(searchParameter)) {
+        var hasNumber = /\d/;
+        searchParameter = searchParameter.toLowerCase();
+        //if the search box contains a number
+        if (hasNumber.test(searchParameter)) {
+            pathParameter = "/address/" + searchParameter;
+        }
+        else {
+            pathParameter = "/name/" + searchParameter;
+        }
+    }
+
+    if (!isNaN(searchParameter)) {
+        var numberToString = searchParameter.toString();
+        if (numberToString.length == 3 || numberToString.length == 4) {
+            pathParameter = "/zipCode/" + searchParameter;
+        }
+        else {
+            pathParameter = "/phoneNumber/" + searchParameter;
+        }
+    }
+    return pathParameter;
 }
 
 function addPhoneToList() {
@@ -129,39 +157,13 @@ function dataToTable(data) {
     tableBody.innerHTML = data.map(data => "<tr><td>" + data.firstName + " " + data.lastName + "</td>"
         + "<td>" + data.email + "</td><td>" + data.phoneNumber.join("\n") + "</td><td>" + data.address + "</td><td>"
         + data.city + "</td><td>" + data.zipCode + "</td><td>" + data.hobbies.join("\n") + "</td>");
+        console.log(data);
 }
 
-function getSearchValue(pathParameter) {
-    var searchParameter = searchField.value
-
-    //If the value in the search box can not be converted to a number
-    if (isNaN(searchParameter)) {
-        var hasNumber = /\d/;
-        searchParameter = searchParameter.toLowerCase();
-        //if the search box contains a number
-        if (hasNumber.test(searchParameter)) {
-            pathParameter = "/address/" + searchParameter;
-        }
-        else {
-            pathParameter = "/name/" + searchParameter;
-        }
-    }
-
-    if (isNaN(searchParameter)) {
-        var numberToString = searchParameter.toString().lenght;
-        if (numberToString == 3 || numberToString == 4) {
-            pathParameter = "/zipCode/" + searchParameter;
-        }
-        else {
-            pathParameter = "/phoneNumber/" + searchParameter;
-        }
-    }
-    return pathParameter;
-}
 
 function handleHttpErrors(res) {
     if (!res.ok) {
-        return Promise.reject({ message: res.message, fullError: res.json() })
+        return Promise.reject({ message: res.message })
     }
     else
         return res.json()
