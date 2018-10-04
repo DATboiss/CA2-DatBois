@@ -57,6 +57,22 @@ public class PersonFacade
         }
         return p;
     }
+    
+    public PersonDTO getPerson(String id)
+    {
+        EntityManager em = emf.createEntityManager();
+        PersonDTO p = null;
+
+        try
+        {
+            p = em.createQuery("SELECT NEW dto.PersonDTO(p) FROM Person p WHERE p.idPerson = :id", PersonDTO.class)
+                    .setParameter("id", id).getSingleResult();
+        } finally
+        {
+            em.close();
+        }
+        return p;
+    }
 
     public List<PersonDTO> getPersonByName(String name)
     {
