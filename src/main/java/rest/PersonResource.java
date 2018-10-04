@@ -68,9 +68,9 @@ public class PersonResource
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public void getPerson(@PathParam("id") int id)
+    public String getPerson(@PathParam("id") int id)
     {
-        pf.getPerson(id);
+        return GSON.toJson(pf.getPerson(id));
     }
 
     /**
