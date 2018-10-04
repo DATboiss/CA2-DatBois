@@ -222,6 +222,7 @@ public class PersonResource
     {
         Person p = null;
         p = GSON.fromJson(json, Person.class);
+        System.out.println(p);
         if (p != null)
         {
             pf.addPerson(p);
