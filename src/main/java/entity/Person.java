@@ -142,7 +142,7 @@ public class Person implements Serializable
     
     public void addPhone(Phone phone)
     {
-//        phone.setPerson(this);
+        phone.setPerson(this);
         phoneCollection.add(phone);
     }
 
