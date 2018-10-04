@@ -28,7 +28,8 @@ import javax.ws.rs.core.Response;
  * @author adams
  */
 @Path("person")
-public class PersonResource {
+public class PersonResource
+{
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private PersonFacade pf = new PersonFacade(Persistence.createEntityManagerFactory("pu"));
@@ -64,8 +65,17 @@ public class PersonResource {
         }
     }
 
+    @GET
+    @Path("{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public void getPerson(@PathParam("id") int id)
+    {
+        pf.getPerson(id);
+    }
+
     /**
-     * Retrieves representation of all instances of Person with the given address
+     * Retrieves representation of all instances of Person with the given
+     * address
      *
      *
      * @param address representation of an address
@@ -89,7 +99,8 @@ public class PersonResource {
     }
 
     /**
-     * Retrieves representation of an instance of Person with the given phone number
+     * Retrieves representation of an instance of Person with the given phone
+     * number
      *
      *
      * @param phoneNumber representaion of a phone number
@@ -111,8 +122,10 @@ public class PersonResource {
             throw new NoPersonException("No persons with the given phone number was found");
         }
     }
+
     /**
-     * Retrieves representation of all instances of Person with the given zip code
+     * Retrieves representation of all instances of Person with the given zip
+     * code
      *
      *
      * @param zipCode representaion of a zipCode
@@ -134,7 +147,7 @@ public class PersonResource {
             throw new NoPersonException("No persons with the given zip was found");
         }
     }
-    
+
     @GET
     @Path("name/{name}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -152,8 +165,8 @@ public class PersonResource {
     }
 
     /**
-     * Retrieves representation of all Person objects, only
-     * returning contact information 
+     * Retrieves representation of all Person objects, only returning contact
+     * information
      *
      * @return a response code and representation of a PersonDTO
      */
@@ -172,9 +185,10 @@ public class PersonResource {
             throw new NoPersonException("No persons with the given address was found");
         }
     }
-    
-        /**
-     * Retrieves representation of all instances of Person with the given zip code
+
+    /**
+     * Retrieves representation of all instances of Person with the given zip
+     * code
      *
      *
      * @param zipCode representaion of a zipCode
@@ -196,7 +210,7 @@ public class PersonResource {
             throw new NoPersonException("No persons with the given hobby was found");
         }
     }
-    
+
     /**
      * POST method for creating an instance of Person
      *
@@ -215,7 +229,7 @@ public class PersonResource {
         {
             throw new NoPersonException("Something went wrong when trying to add the person in the database");
         }
-        
+
     }
 
     /**
@@ -239,6 +253,7 @@ public class PersonResource {
             throw new NoPersonException("Something went wrong when trying to edit the person in the database");
         }
     }
+
     /**
      * DELETE method for deleting instance of Person
      *
