@@ -65,7 +65,7 @@ function postPerson() {
         address: {
             street: street,
             additionalInfo: additionalInfo,
-            Cityinfo: {
+            cityinfo: {
                 zipCode: zipCode,
                 city: city
             },
@@ -157,7 +157,7 @@ function dataToTable(data) {
     tableBody.innerHTML = data.map(data => "<tr><td>" + data.firstName + " " + data.lastName + "</td>"
         + "<td>" + data.email + "</td><td>" + data.phoneNumber.join("\n") + "</td><td>" + data.address + "</td><td>"
         + data.city + "</td><td>" + data.zipCode + "</td><td>" + data.hobbies.join("\n") + "</td>");
-        console.log(data);
+        console.log(data)
 }
 
 

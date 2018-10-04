@@ -49,7 +49,6 @@ public class AddressFacade
         EntityManager em = getEntityManager();
         try
         {
-            Query zipcodes = em.createQuery("SELECT c.city FROM Cityinfo c");
             return zipcodes.getResultList();
         } finally
         {
