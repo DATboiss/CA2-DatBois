@@ -34,7 +34,7 @@ public class Phone implements Serializable
     private String description;
 
     @JoinColumn(name = "Person_idPerson", referencedColumnName = "idPerson")
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne
     private Person person;
 
     public Phone()

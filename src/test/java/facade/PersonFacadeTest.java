@@ -78,10 +78,10 @@ public class PersonFacadeTest
         h3.addPerson(p);
         
         p.addPhone(p1);
-        p1.setPerson(p);
+//        p1.setPerson(p);
         
         p.addPhone(p2);
-        p2.setPerson(p);
+//        p2.setPerson(p);
         
         PersonFacade instance = new PersonFacade(Persistence.createEntityManagerFactory("pu"));
         Person expResult = p;
