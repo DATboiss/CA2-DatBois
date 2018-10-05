@@ -1,5 +1,6 @@
 package dto;
 
+import entity.Cityinfo;
 import java.util.List;
 
 /**
@@ -18,6 +19,12 @@ public class CityInfoDTO {
     {
         this.zipCode = zipCode;
         this.city = city;
+    }
+    
+    public CityInfoDTO(Cityinfo cityInfo)
+    {
+        this.zipCode = cityInfo.getZipCode();
+        this.city = cityInfo.getCity();
     }
 
     public String getZipCode()

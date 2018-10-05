@@ -19,12 +19,11 @@ public class PersonDTO
     private String firstName;
     private String lastName;
     private String email;
-    private String addressStreet;
-    private String addressAdditionalInfo;
+    private AddressDTO address;
     private String zipcode;
     private String city;
-    private List<String> phoneNumber;
-    private List<String> hobbies;
+    private List<PhoneDTO> phoneNumber;
+    private List<HobbyDTO> hobbies;
 
     public PersonDTO()
     {
@@ -35,12 +34,9 @@ public class PersonDTO
         this.firstName = p.getFirstName();
         this.lastName = p.getLastName();
         this.email = p.getEmail();
-        this.addressStreet = p.getAddress().getStreet();
-        this.addressAdditionalInfo = p.getAddress().getAdditionalInfo();
-        this.zipcode = p.getAddress().getCityinfo().getZipCode();
-        this.city = p.getAddress().getCityinfo().getCity();
-        this.phoneNumber = p.getPhoneCollection().stream().map(pho -> pho.getNumber()).collect(Collectors.toList());
-        this.hobbies = p.getHobbyCollection().stream().map(hob -> hob.getName()).collect(Collectors.toList());
+        this.address = new AddressDTO(p.getAddress());
+        this.phoneNumber = p.getPhoneCollection().stream().map(pho -> new PhoneDTO(pho.getNumber(), pho.getDescription())).collect(Collectors.toList());
+        this.hobbies = p.getHobbyCollection().stream().map(hob -> new HobbyDTO(hob.getName(), hob.getDescription())).collect(Collectors.toList());
     }
 
     public String getFirstName()
@@ -73,46 +69,6 @@ public class PersonDTO
         this.email = email;
     }
 
-    public String getAddressStreet()
-    {
-        return addressStreet;
-    }
-
-    public void setAddressStreet(String addressStreet)
-    {
-        this.addressStreet = addressStreet;
-    }
-
-    public List<String> getPhoneNumber()
-    {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(List<String> phoneNumber)
-    {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public List<String> getHobbies()
-    {
-        return hobbies;
-    }
-
-    public void setHobbies(List<String> hobbies)
-    {
-        this.hobbies = hobbies;
-    }
-
-    public String getAddressAdditionalInfo()
-    {
-        return addressAdditionalInfo;
-    }
-
-    public void setAddressAdditionalInfo(String addressAdditionalInfo)
-    {
-        this.addressAdditionalInfo = addressAdditionalInfo;
-    }
-
     public String getZipcode()
     {
         return zipcode;
@@ -133,4 +89,36 @@ public class PersonDTO
         this.city = city;
     }
 
-}
+    public AddressDTO getAddress()
+    {
+        return address;
+    }
+
+    public void setAddress(AddressDTO address)
+    {
+        this.address = address;
+    }
+
+    public List<PhoneDTO> getPhoneNumber()
+    {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(List<PhoneDTO> phoneNumber)
+    {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public List<HobbyDTO> getHobbies()
+    {
+        return hobbies;
+    }
+
+    public void setHobbies(List<HobbyDTO> hobbies)
+    {
+        this.hobbies = hobbies;
+    }
+    
+    
+
+}//CLASS
