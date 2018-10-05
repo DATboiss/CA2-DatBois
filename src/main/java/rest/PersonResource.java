@@ -138,7 +138,7 @@ public class PersonResource
     {
         //Use Facade to get the person, this is just an example of the exception handling
         List<PersonDTO> p = null;
-        p = af.getPersonFromZip(zipCode);
+        p = pf.getPersonsByCity(zipCode);
         if (p != null)
         {
             return Response.ok(GSON.toJson(p)).build();

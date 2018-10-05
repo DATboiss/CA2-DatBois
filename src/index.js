@@ -23,7 +23,7 @@ deletePersonBtn.addEventListener("click", deletePerson);
 hobbyBtn.addEventListener("click", getHobbies);
 zipcodeBtn.addEventListener("click", getZipCodes)
 
-var URL = "http://localhost:8080/CA2/api/person/";
+var URL = "http://localhost:8084/CA2/api/person/";
 function makeOptions(method, body) {
     var opts = {
         method: method,
@@ -234,9 +234,11 @@ function removePhone(e) {
 
 
 function dataToTable(data) {
+    console.log(data.stringify);
+    
     tableBody.innerHTML = data.map(data => "<tr><td>" + data.firstName + " " + data.lastName + "</td>"
-        + "<td>" + data.email + "</td><td>" + data.phoneNumber.join("\n") + "</td><td>" + data.address + "</td><td>"
-        + data.city + "</td><td>" + data.zipCode + "</td><td>" + data.hobbies.join("\n") + "</td>");
+        + "<td>" + data.email + "</td><td>" + data.phoneNumber.join("\n") + "</td><td>" + data.addressStreet + "</td><td>"
+        + data.city + "</td><td>" + data.zipcode + "</td><td>" + data.hobbies.join("\n") + "</td>");
 }
 
 

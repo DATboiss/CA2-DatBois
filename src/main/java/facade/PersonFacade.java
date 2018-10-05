@@ -4,6 +4,9 @@ import dto.PersonDTO;
 import entity.Cityinfo;
 import entity.Hobby;
 import entity.Person;
+import entity.Phone;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -29,6 +32,16 @@ public class PersonFacade
         String zipCode = p.getAddress().getCityinfo().getZipCode();
         Cityinfo ci = em.createQuery("SELECT c FROM Cityinfo c WHERE c.zipCode = :zipCode", Cityinfo.class).setParameter("zipCode", zipCode).getSingleResult();
         p.getAddress().setCityinfo(ci);
+        if (p.getPhoneCollection() != null)
+        {
+            System.out.println("####################vi kommer herind");
+            Collection<Phone> phoneArr = p.getPhoneCollection();
+            for (Phone phone : phoneArr)
+            {
+                System.out.println("###### vikommer også herind");
+                phone.setPerson(p);
+            }
+        }
         try
         {
             em.getTransaction().begin();
@@ -133,7 +146,7 @@ public class PersonFacade
 
         try
         {
-            persons = em.createQuery("SELECT NEW dto.PersonDTO(p) FROM Person p JOIN Address JOIN Cityinfo c WHERE p.address.cityinfo.zipCode = :zipCode", PersonDTO.class).setParameter("zipCode", zipCode).getResultList();
+            persons = em.createQuery("SELECT NEW dto.PersonDTO(p) FROM Person p JOIN Address a JOIN Cityinfo c WHERE p.address.cityinfo.zipCode = :zipCode", PersonDTO.class).setParameter("zipCode", zipCode).getResultList();
         } finally
         {
             em.close();
