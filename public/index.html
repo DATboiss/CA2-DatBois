@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 
@@ -12,13 +13,17 @@
     <input type="text" id="searchField" placeholder="Enter a name, phone number or address" style="width: 50vw">
     <input type="submit" id="searchBtn" value="Search">
     <input type="submit" id="hobbyBtn" value="Find hobby">
+    <input type="submit" id="hobbyCountBtn" value="Get hobby count">
     <input type="submit" id="zipcodeBtn" value="Find Zip Codes">
+    <input type="submit" id="contactInfoBtn" value="Get contact info">
   </div>
 
   <!-- Button trigger modal -->
   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
     Create/Update/Delete Person
   </button>
+  <div id="errorMsg"></div>
+  <p id="hobyCount"></p>
 
   <!-- Modal -->
   <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -36,7 +41,8 @@
               <label for="recipient-name" class="col-form-label">id:</label>
               <input type="text" class="form-control" id="id" placeholder="Only required if you want to update or delete">
               <button type="button" class="btn btn-primary" id="getPersonBtn">Get info</button>
-              <button type="button" class="btn btn-primary" id="deletePersonBtn">Delete person</button><br>
+              <button type="button" class="btn btn-primary" id="deletePersonBtn">Delete person</button>
+              <button type="button" class="btn btn-primary" id="deleteHobbyBtn">Delete hobby</button><br>
 
               <label for="message-text" class="col-form-label">First name:</label>
               <input type="text" class="form-control" id="firstName">
@@ -63,19 +69,23 @@
               <select id="hobbyName" class="form-control">
                 <option selected>Choose...</option>
               </select>
+              <button type="button" class="btn btn-primary" id="addHobbyBtn">Add hobby</button>
+              <p id="hobbyError"></p>
               <p id="hobbyDescription"></p>
+              <div id="addedHobbies"></div>
             </div>
           </form>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="postButton">Create Person</button>
+          <button type="button" class="btn btn-primary" id="putBtn">Update Person</button>
+          <button type="button" class="btn btn-primary" id="postBtn">Create Person</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Table -->
+  <!-- Table People -->
   <div class="table-full" style="visibility: hidden" id="tableFull">
     <table class="table">
       <thead>
@@ -90,6 +100,19 @@
         </tr>
       </thead>
       <tbody id="tableBody">
+      </tbody>
+    </table>
+  </div>
+  <!-- Table Cityinfo -->
+  <div class="table-full" style="visibility: hidden" id="tableCity">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Zip Code</th>
+        </tr>
+      </thead>
+      <tbody id="cityBody">
       </tbody>
     </table>
   </div>
