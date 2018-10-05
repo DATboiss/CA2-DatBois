@@ -3,6 +3,8 @@ package entity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -45,7 +47,7 @@ public class Address implements Serializable
     private Cityinfo cityinfo;
     
     @OneToMany(mappedBy = "address", fetch = FetchType.EAGER)
-    private Collection<Person> personCollection = new ArrayList();
+    private List<Person> personCollection = new ArrayList();
 
     public Address()
     {
@@ -103,15 +105,47 @@ public class Address implements Serializable
         personCollection.add(p);
     }
 
-    public void setPersonCollection(Collection<Person> personCollection)
+    public void setPersonCollection(List<Person> personCollection)
     {
         this.personCollection = personCollection;
     }
+    
+    
+
+//    @Override
+//    public String toString()
+//    {
+//        return "Address{" + "idAddress=" + idAddress + ", street=" + street + ", additionalInfo=" + additionalInfo + ", cityinfo=" + cityinfo + ", personCollection=" + personCollection + '}';
+//    }
 
     @Override
-    public String toString()
+    public int hashCode()
     {
-        return "Address{" + "idAddress=" + idAddress + ", street=" + street + ", additionalInfo=" + additionalInfo + ", cityinfo=" + cityinfo + ", personCollection=" + personCollection + '}';
+        int hash = 7;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+        if (obj == null)
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
+        final Address other = (Address) obj;
+        if (!Objects.equals(this.idAddress, other.idAddress))
+        {
+            return false;
+        }
+        return true;
     }
     
     

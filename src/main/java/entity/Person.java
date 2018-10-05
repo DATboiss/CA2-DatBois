@@ -4,6 +4,8 @@ import dto.PersonDTO;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -47,12 +49,12 @@ public class Person implements Serializable
     @Column(name = "lastName")
     private String lastName;
 
-    @ManyToMany(cascade = CascadeType.PERSIST, mappedBy = "personCollection", fetch = FetchType.EAGER)
-    private Collection<Hobby> hobbyCollection = new ArrayList();
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "personCollection", fetch = FetchType.EAGER)
+    private List<Hobby> hobbyCollection = new ArrayList();
 
     @JoinColumn(name = "Phone_idPhone", referencedColumnName = "idPhone")
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "person", fetch = FetchType.EAGER)
-    private Collection<Phone> phoneCollection = new ArrayList();
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "person", fetch = FetchType.EAGER)
+    private List<Phone> phoneCollection = new ArrayList();
 
     @JoinColumns(
             {
@@ -111,7 +113,7 @@ public class Person implements Serializable
         this.lastName = lastName;
     }
 
-    public Collection<Hobby> getHobbyCollection()
+    public List<Hobby> getHobbyCollection()
     {
         return hobbyCollection;
     }
@@ -128,12 +130,12 @@ public class Person implements Serializable
         hobbyCollection.add(hobby);
     }
 
-    public void setHobbyCollection(Collection<Hobby> hobbyCollection)
+    public void setHobbyCollection(List<Hobby> hobbyCollection)
     {
         this.hobbyCollection = hobbyCollection;
     }
 
-    public Collection<Phone> getPhoneCollection()
+    public List<Phone> getPhoneCollection()
     {
         return phoneCollection;
     }
@@ -144,7 +146,7 @@ public class Person implements Serializable
         phoneCollection.add(phone);
     }
 
-    public void setPhoneCollection(Collection<Phone> phoneCollection)
+    public void setPhoneCollection(List<Phone> phoneCollection)
     {
         this.phoneCollection = phoneCollection;
     }
@@ -159,20 +161,69 @@ public class Person implements Serializable
         this.address = address;
     }
 
-    @Override
-    public String toString()
-    {
-        String s = "Person{" + "idPerson=" + idPerson + ",\n email=" + email + ", \nfirstName=" + firstName + ", \nlastName=" + lastName + ", \nhobbyCollection=";
-        for (Hobby hobby : hobbyCollection)
-        {
-            s+= hobby + "\n";
-        }
-        for (Phone  phone : phoneCollection)
-        {
-            s+= phone + "\n";
-        }
-        s += ", address=" + address + '}';
-        return s;
-    }
     
+    
+//    @Override
+//    public String toString()
+//    {
+//        String s = "Person{" + "idPerson=" + idPerson + ",\n email=" + email + ", \nfirstName=" + firstName + ", \nlastName=" + lastName + ", \nhobbyCollection=";
+//        for (Hobby hobby : hobbyCollection)
+//        {
+//            s+= hobby + "\n";
+//        }
+//        for (Phone  phone : phoneCollection)
+//        {
+//            s+= phone + "\n";
+//        }
+//        s += ", address=" + address + '}';
+//        return s;
+//    }
+//    
+
+    @Override
+    public int hashCode()
+    {
+        int hash = 3;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+        if (obj == null)
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
+        final Person other = (Person) obj;
+        if (!Objects.equals(this.idPerson, other.idPerson))
+        {
+            return false;
+        }
+        return true;
+    }
+
+
+    public Person setValues(Person p)
+    {
+        this.email = p.getEmail();
+        this.firstName = p.getFirstName();
+        this.lastName = p.getLastName();
+        this.address = p.getAddress();
+        this.phoneCollection = p.getPhoneCollection();
+        for (Phone phone : phoneCollection)
+        {
+            phone.setPerson(this);
+        }
+        this.hobbyCollection = p.getHobbyCollection();
+        //Need to set person in each hobby
+        return this;
+    }
 }

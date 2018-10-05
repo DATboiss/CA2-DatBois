@@ -3,6 +3,8 @@ package entity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -39,8 +41,8 @@ public class Cityinfo implements Serializable
     @Size(max = 45)
     @Column(name = "city")
     private String city;
-    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "cityinfo", fetch = FetchType.EAGER)
-    private Collection<Address> addressCollection = new ArrayList();
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "cityinfo", fetch = FetchType.EAGER)
+    private List<Address> addressCollection = new ArrayList();
 
     public Cityinfo()
     {
@@ -78,7 +80,7 @@ public class Cityinfo implements Serializable
         this.city = city;
     }
 
-    public Collection<Address> getAddressCollection()
+    public List<Address> getAddressCollection()
     {
         return addressCollection;
     }
@@ -89,15 +91,47 @@ public class Cityinfo implements Serializable
         addressCollection.add(a);
     }
 
-    public void setAddressCollection(Collection<Address> addressCollection)
+    public void setAddressCollection(List<Address> addressCollection)
     {
         this.addressCollection = addressCollection;
     }
+    
+    
+
+//    @Override
+//    public String toString()
+//    {
+//        return "Cityinfo{" + "idCityInfo=" + idCityInfo + ", zipCode=" + zipCode + ", city=" + city + ", addressCollection=" + addressCollection + '}';
+//    }
 
     @Override
-    public String toString()
+    public int hashCode()
     {
-        return "Cityinfo{" + "idCityInfo=" + idCityInfo + ", zipCode=" + zipCode + ", city=" + city + ", addressCollection=" + addressCollection + '}';
+        int hash = 7;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+        if (obj == null)
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
+        final Cityinfo other = (Cityinfo) obj;
+        if (!Objects.equals(this.idCityInfo, other.idCityInfo))
+        {
+            return false;
+        }
+        return true;
     }
 
 }
