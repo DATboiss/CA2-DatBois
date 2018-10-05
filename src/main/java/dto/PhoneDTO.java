@@ -3,27 +3,26 @@ package dto;
 /**
  *
  * @author Sebastian
-
  */
-public class HobbyDTO
+public class PhoneDTO
 {
-    private String name;
-    private String description;
+ private String number;
+ private String description;
 
-    public HobbyDTO(String name, String description)
+    public PhoneDTO(String number, String description)
     {
-        this.name = name;
+        this.number = number;
         this.description = description;
     }
 
-    public String getName()
+    public String getNumber()
     {
-        return name;
+        return number;
     }
 
-    public void setName(String name)
+    public void setNumber(String number)
     {
-        this.name = name;
+        this.number = number;
     }
 
     public String getDescription()
@@ -35,8 +34,6 @@ public class HobbyDTO
     {
         this.description = description;
     }
-    
-    
-    
-    
-}//CLASS
+ 
+ 
+}

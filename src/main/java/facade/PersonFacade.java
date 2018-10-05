@@ -1,5 +1,6 @@
 package facade;
 
+import dto.HobbyDTO;
 import dto.PersonDTO;
 import entity.Cityinfo;
 import entity.Hobby;
@@ -161,7 +162,7 @@ public class PersonFacade
         
         try
         {
-            count = (long) em.createQuery("SELECT COUNT(p) FROM Person p JOIN Hobby h WHERE h.name = :hobbyName")
+            count = (long) em.createQuery("SELECT COUNT(p) FROM Person p JOIN Hobby h WHERE h MEMBER OF P.hobbyCollection AND h.name = :hobbyName")
                     .setParameter("hobbyName", hobbyName).getSingleResult();
         } finally
         {
@@ -275,15 +276,14 @@ public class PersonFacade
         }
         return persons;
     }
-    
-    public List<Hobby> getAllHobbies()
+
+    public List<HobbyDTO> getAllHobbies()
     {
         EntityManager em = emf.createEntityManager();
-        List<Hobby> hobbies = null;
-        
+        List<HobbyDTO> hobbies = null;
         try
         {
-            hobbies = em.createQuery("SELECT h FROM Hobby h", Hobby.class).getResultList();
+            hobbies = em.createQuery("SELECT NEW dto.HobbyDTO(h) FROM Hobby h", HobbyDTO.class).getResultList();
         } finally
         {
             em.close();

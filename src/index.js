@@ -6,22 +6,89 @@ var searchBtn = document.getElementById("searchBtn");
 var addPhone = document.getElementById("addPhone");
 var addedPhones = document.getElementById("addedPhones");
 var phoneError = document.getElementById("phoneError");
-var postButton = document.getElementById("postButton");
+var postBtn = document.getElementById("postBtn");
+var putBtn = document.getElementById("putBtn");
 var getPersonBtn = document.getElementById("getPersonBtn");
 var deletePersonBtn = document.getElementById("deletePersonBtn");
 var hobbyBtn = document.getElementById("hobbyBtn");
+var hobbyCountBtn = document.getElementById("hobbyCountBtn");
 var zipcodeBtn = document.getElementById("zipcodeBtn");
-var phoneNumbers = [];
+var hobbyDropDownValues = document.getElementById("hobbyName");
+var hobbyError = document.getElementById("hobbyError");
+var hobbyDescription = document.getElementById("hobbyDescription");
+var errorMsgDiv = document.getElementById("errorMsg");
+var tableCityBody = document.getElementById("cityBody");
+var tableCity = document.getElementById("tableCity");
+var addHobbyBtn = document.getElementById("addHobbyBtn");
+var phoneList = [];
+var hobbyList = [];
+var allHobbyList = [];
+getAllHobbies()
 
 
-postButton.addEventListener("click", postPerson)
+postBtn.addEventListener("click", postPerson)
 addPhone.addEventListener("click", addPhoneToList);
 searchBtn.addEventListener("click", getPerson);
 addedPhones.addEventListener("click", removePhone);
 getPersonBtn.addEventListener("click", personInfoToForm);
 deletePersonBtn.addEventListener("click", deletePerson);
 hobbyBtn.addEventListener("click", getHobbies);
-zipcodeBtn.addEventListener("click", getZipCodes)
+zipcodeBtn.addEventListener("click", getCityInfo);
+putBtn.addEventListener("click", putPerson);
+addHobbyBtn.addEventListener("click", addHobbyToList);
+hobbyDescription.addEventListener("click", removeHobby);
+hobbyCountBtn.addEventListener("click", getHobbyCount);
+console.log(hobbyList);
+
+
+function getHobbyCount()
+{
+    var count = document.getElementById("hobyCount");
+    fetch("http://localhost:8080/CA2/api/hobby/" + searchField.value)
+    .then(handleHttpErrors)
+    .then(data => {
+        count.innerHTML = "<p>" + "Hobby: " + searchField.value + " has " + data.count + " participants";
+    })
+    .catch(err => {
+        console.log('caught :' + err);
+        if (err.httpError) {
+            err.fullError.then(displaySearchError);
+        }
+        else {
+            console.log("Network error");
+        }
+    })
+}
+
+function addHobbyToList() {
+    var selectedHobby = document.getElementById('hobbyName').options[document.getElementById('hobbyName').selectedIndex].text;
+    for (var i = 0; i < allHobbyList.length; i++) {
+        if (allHobbyList[i].name == selectedHobby && !hobbyList.filter(h => h.name == selectedHobby).length > 0) {
+            hobbyError.style = "hidden";
+            hobbyList.push(allHobbyList[i]);
+            hobbyDescription.innerHTML = hobbyList.map(hobby => '<button type="button" class="close" aria-label="Close">' +
+                '<span aria-hidden="true" id="' + hobby.name + '">&times;</span></button><p>' + hobby.name + "<br>" + hobby.description + '</p>').join("");
+        } 
+    }
+
+    console.log(hobbyList);
+}
+function HobbiesToHTML(array) {
+    hobbyDescription.innerHTML = "";
+    hobbyDescription.innerHTML = array.map(hobby => '<button type="button" class="close" aria-label="Close">' +
+        '<span aria-hidden="true" id="' + hobby.name + '">&times;</span></button><p>' + hobby.name + "<br>" + hobby.description + '</p>').join("");
+}
+function removeHobby(e) {
+    var hobby = e.target.id;
+    for (var i = 0; i < hobbyList.length; i++) {
+        if (hobbyList[i].name == hobby) {
+            hobbyList.splice(hobbyList[i], 1);
+        }
+        HobbiesToHTML(hobbyList);
+    }
+}
+
+
 
 var URL = "http://localhost:8080/CA2/api/person/";
 
@@ -40,16 +107,16 @@ function makeOptions(method, body) {
 
 function getPerson() {
     var pathParameter = getSearchValue(pathParameter);
-    tableFull.style = "visible"
-    // fetch(URL, makeOptions("POST", p))
-    // fetch(URL + "/" +113, makeOptions("DELETE"))
+    tableCity.style = "hidden";
     fetch(URL + pathParameter)
         .then(handleHttpErrors)
         .then(dataToTable)
         .catch(err => {
+            console.log('caught :' + err);
             if (err.httpError) {
-                err.fullError.then(e => console.log(e));
-            } else {
+                err.fullError.then(displaySearchError);
+            }
+            else {
                 console.log("Network error");
             }
         })
@@ -64,13 +131,70 @@ function postPerson() {
     var additionalInfo = document.getElementById("additionalInfo").value;
     var zipCode = document.getElementById("zipCode").value;
     var city = document.getElementById("city").value;
-    var hobby = "WoW" //document.getElementById("hobbyName");
-    var hobbyDesc = "Gamez" //document.getElementById("hobbyDescription");
     var p = {
         firstName: firstName,
         lastName: lastName,
         email: email,
-        phoneCollection: phoneNumbers,
+        phoneCollection: phoneList,
+        address: {
+            street: street,
+            additionalInfo: additionalInfo,
+            cityinfo: {
+                zipCode: zipCode,
+                city: city,
+            },
+        },
+        hobbyCollection: hobbyList,
+    }
+    console.log(JSON.stringify(p));
+    fetch(URL, makeOptions("POST", p))
+        .then(handleHttpErrors)
+        .then(data => console.log(data))
+        .catch(err => {
+            if (err.httpError) {
+                err.fullError.then(displaySearchError)
+            }
+            else {
+                console.log("Network error")
+            }
+        })
+}
+
+function getAllHobbies() {
+    fetch("http://localhost:8080/CA2/api/hobby")
+        .then(handleHttpErrors)
+        .then(data => {
+            for (var i = 0; i < data.length; i++) {
+                hobbyDropDownValues.innerHTML += "<option id='" + data[i].name + "'>" + data[i].name + "</option>";
+                allHobbyList.push(data[i]);
+            }
+        })
+        .catch(err => {
+            if (err.httpError) {
+                err.fullError.then(displaySearchError)
+            }
+            else {
+                console.log("Network error")
+            }
+        })
+}
+
+function putPerson() {
+    var id = document.getElementById("id").value;
+    var firstName = document.getElementById("firstName").value;
+    var lastName = document.getElementById("lastName").value;
+    var email = document.getElementById("email").value;
+    var street = document.getElementById("street").value;
+    var additionalInfo = document.getElementById("additionalInfo").value;
+    var zipCode = document.getElementById("zipCode").value;
+    var city = document.getElementById("city").value;
+    var hobbies = hobbyList;
+    var p = {
+        idPerson: id,
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        phoneCollection: phoneList,
         address: {
             street: street,
             additionalInfo: additionalInfo,
@@ -79,24 +203,22 @@ function postPerson() {
                 city: city
             },
         },
-        hobbyCollection: [{
-            name: hobby,
-            description: hobbyDesc
-        }]
+        hobbyCollection: hobbies,
     }
-    console.log(p);
-    fetch(URL, makeOptions("POST", p))
+    console.log(JSON.stringify(p));
+    fetch(URL + "update/", makeOptions("PUT", p))
         .then(handleHttpErrors)
         .then(data => console.log(data))
         .catch(err => {
+            console.log(JSON.parse(err));
             if (err.httpError) {
-                err.fullError.then(e => console.log(e.message))
-            } else {
+                err.fullError.then(displaySearchError)
+            }
+            else {
                 console.log("Network error")
             }
         })
 }
-
 function deletePerson() {
     var id = document.getElementById("id").value;
     fetch(URL + id, makeOptions("DELETE"))
@@ -104,8 +226,9 @@ function deletePerson() {
         .then(data => console.log(data))
         .catch(err => {
             if (err.httpError) {
-                err.fullError.then(e => console.log(e.message))
-            } else {
+                err.fullError.then(displaySearchError)
+            }
+            else {
                 console.log("Network error")
             }
         })
@@ -113,27 +236,15 @@ function deletePerson() {
 }
 
 function getHobbies() {
+    tableCity.style = "hidden";
     fetch(URL + "hobby/" + searchField.value)
         .then(handleHttpErrors)
         .then(dataToTable)
         .catch(err => {
             if (err.httpError) {
                 err.fullError.then(e => console.log(e));
-            } else {
-                console.log("Network error");
             }
-        })
-}
-
-function getZipCodes() {
-    fetch(URL + "zipCode/" + searchField.value)
-        .then(handleHttpErrors)
-        //TODO create table with only city & zip code
-        .then(dataToTable)
-        .catch(err => {
-            if (err.httpError) {
-                err.fullError.then(e => console.log(e));
-            } else {
+            else {
                 console.log("Network error");
             }
         })
@@ -149,16 +260,18 @@ function getSearchValue(pathParameter) {
         //if the search box contains a number
         if (hasNumber.test(searchParameter)) {
             pathParameter = "address/" + searchParameter;
-        } else {
+        }
+        else {
             pathParameter = "name/" + searchParameter;
         }
     }
 
     if (!isNaN(searchParameter)) {
         var numberToString = searchParameter.toString();
-        if (numberToString.length == 3 || numberToString.length == 4) {
+        if (numberToString.length <= 4) {
             pathParameter = "zipCode/" + searchParameter;
-        } else {
+        }
+        else {
             pathParameter = "phoneNumber/" + searchParameter;
         }
     }
@@ -173,8 +286,9 @@ function personInfoToForm() {
         .then(dataToForm)
         .catch(err => {
             if (err.httpError) {
-                err.fullError.then(e => console.log(e));
-            } else {
+                err.fullError.then(displaySearchError);
+            }
+            else {
                 console.log("Network error");
             }
         })
@@ -198,11 +312,12 @@ function addPhoneToList() {
         number: phoneNumber,
         description: phoneDesc
     }
-    if (!phoneNumbers.filter(p => p.number == phoneNumber).length > 0) {
-        phoneNumbers.push(phone);
-        phonesToHTML(phoneNumbers);
+    if (!phoneList.filter(p => p.number == phoneNumber).length > 0) {
+        phoneList.push(phone);
+        phonesToHTML(phoneList);
         phoneError.innerText = "";
-    } else {
+    }
+    else {
         phoneError.innerText = "You have already added this phone.";
         phoneError.style.color = 'red';
     }
@@ -216,28 +331,63 @@ function phonesToHTML(array) {
 
 function removePhone(e) {
     var phone = e.target.id;
-    for (var i = 0; i < phoneNumbers.length; i++) {
-        if (phoneNumbers[i].number == phone) {
-            phoneNumbers.splice(phoneNumbers[i], 1);
+    for (var i = 0; i < phoneList.length; i++) {
+        if (phoneList[i].number == phone) {
+            phoneList.splice(phoneList[i], 1);
         }
-        phonesToHTML(phoneNumbers);
+        phonesToHTML(phoneList);
     }
 }
 
 
 function dataToTable(data) {
-    tableBody.innerHTML = data.map(data => "<tr><td>" + data.firstName + " " + data.lastName + "</td>" +
-        "<td>" + data.email + "</td><td>" + data.phoneNumber.join("\n") + "</td><td>" + data.addressStreet + "</td><td>" +
-        data.city + "</td><td>" + data.zipcode + "</td><td>" + data.hobbies.join("\n") + "</td>");
+    console.log(data);
+    tableCityBody.innerHTML = "";
+    if (Array.isArray(data)) {
+        tableBody.innerHTML = data.map(data => "<tr><td>" + data.firstName + " " + data.lastName + "</td>"
+            + "<td>" + data.email + "</td><td>" + data.phoneNumber.join(", ") + "</td><td>" + data.addressStreet + " - Add. Info: " + data.addressAdditionalInfo + "</td><td>"
+            + data.city + "</td><td>" + data.zipcode + "</td><td>" + data.hobbies.join(", ") + "</td>");
+    } else {
+        tableBody.innerHTML = "<tr><td>" + data.firstName + " " + data.lastName + "</td>"
+            + "<td>" + data.email + "</td><td>" + data.phoneNumber.join(", ") + "</td><td>" + data.addressStreet + " - Add. Info: " + data.addressAdditionalInfo + "</td><td>"
+            + data.city + "</td><td>" + data.zipcode + "</td><td>" + data.hobbies.join(", ") + "</td>";
+    }
     tableFull.style = "visible";
 }
 
+function getCityInfo() {
+    tableBody.innerHTML = "";
+    fetch("http://localhost:8080/CA2/api/cityinfo")
+        .then(handleHttpErrors)
+        .then(cityDataToTable)
+        .catch(err => {
+            console.log('caught :' + err);
+            if (err.httpError) {
+                err.fullError.then(displaySearchError);
+            }
+            else {
+                console.log("Network error");
+            }
+        })
+
+    function cityDataToTable(data) {
+        tableCityBody.innerHTML = data.map(data => "<tr><td>" + data.city + "</td><td>" + data.zipCode + "</td></tr>");
+        tableCity.style = "visible";
+    }
+}
+
+
+function displaySearchError(e) {
+    tableFull.style = "hidden";
+    errorMsgDiv.innerHTML = "<h2>" + e.message + "</h2>";
+    errorMsgDiv.style.color = "red";
+}
 
 function handleHttpErrors(res) {
     if (!res.ok) {
-        return Promise.reject({
-            message: res.message
-        })
-    } else
+        return Promise.reject({ httpError: res.status, fullError: res.json() })
+    }
+    else
         return res.json()
 }
+
