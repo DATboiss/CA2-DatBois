@@ -33,7 +33,7 @@ public class AddressFacade
         EntityManager em = getEntityManager();
         try
         {
-            return em.createQuery("SELECT new CityInfoDTO(c.zipCode, c.city) FROM Cityinfo c", CityInfoDTO.class).getResultList();
+            return em.createQuery("SELECT new dto.CityInfoDTO(c.zipCode, c.city) FROM Cityinfo c", CityInfoDTO.class).getResultList();
         } finally
         {
             em.close();
