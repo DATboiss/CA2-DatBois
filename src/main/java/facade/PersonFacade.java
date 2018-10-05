@@ -135,7 +135,7 @@ public class PersonFacade {
 
         try
         {
-            count = (long) em.createQuery("SELECT COUNT(p) FROM Person p JOIN Hobby h WHERE h.name = :hobbyName")
+            count = (long) em.createQuery("SELECT COUNT(p) FROM Person p JOIN Hobby h WHERE h MEMBER OF P.hobbyCollection AND h.name = :hobbyName")
                     .setParameter("hobbyName", hobbyName).getSingleResult();
         } finally
         {
