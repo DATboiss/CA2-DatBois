@@ -55,7 +55,7 @@ public class PersonResource {
         //Use Facade to get the person, this is just an example of the exception handling
         List<PersonDTO> p = null;
         p = pf.getAllPersons();
-        if (p != null)
+        if (!p.isEmpty())
         {
             return Response.ok(GSON.toJson(p)).build();
         } else
@@ -88,7 +88,7 @@ public class PersonResource {
         //Use Facade to get the person, this is just an example of the exception handling
         List<PersonDTO> p = null;
         pf.getPersonByAddress(address);
-        if (p != null)
+        if (!p.isEmpty())
         {
             return Response.ok(GSON.toJson(p)).build();
         } else
@@ -138,7 +138,6 @@ public class PersonResource {
         //Use Facade to get the person, this is just an example of the exception handling
         List<PersonDTO> p = null;
         p = pf.getPersonsByCity(zipCode);
-        System.out.println("=================SIZE=========\n" + p.size());
         if (!p.isEmpty())
         {
             return Response.ok(GSON.toJson(p)).build();
@@ -163,7 +162,7 @@ public class PersonResource {
     {
         //Use Facade to get the person, this is just an example of the exception handling
         List<PersonDTO> p = pf.getPersonByName(name);
-        if (p != null)
+        if (!p.isEmpty())
         {
             return Response.ok(GSON.toJson(p)).build();
         } else
@@ -210,7 +209,7 @@ public class PersonResource {
         //Use Facade to get the person, this is just an example of the exception handling
         List<PersonDTO> p = null;
         p = pf.getPersonsByHobby(hobby);
-        if (p != null)
+        if (!p.isEmpty())
         {
             return Response.ok(GSON.toJson(p)).build();
         } else
