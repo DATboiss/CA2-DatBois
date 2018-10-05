@@ -68,7 +68,7 @@ public class PersonFacade {
 
         try
         {
-            p = em.createQuery("SELECT NEW dto.PersonDTO(p) FROM Person p JOIN Phone phone WHERE phone.number = :number", PersonDTO.class)
+            p = em.createQuery("SELECT NEW dto.PersonDTO(p) FROM Person p JOIN Phone ph WHERE ph MEMBER OF P.phoneCollection AND ph.number = :number", PersonDTO.class)
                     .setParameter("number", phoneNum).getSingleResult();
         } finally
         {
