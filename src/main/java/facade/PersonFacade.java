@@ -119,7 +119,7 @@ public class PersonFacade {
 
         try
         {
-            persons = em.createQuery("SELECT NEW dto.PersonDTO(p) FROM Person p JOIN Hobby h WHERE h.name = :name", PersonDTO.class)
+            persons = em.createQuery("SELECT NEW dto.PersonDTO(p) FROM Person p JOIN Hobby h WHERE p MEMBER OF h.personCollection AND h.name = :name", PersonDTO.class)
                     .setParameter("name", hobbyName).getResultList();
         } finally
         {
