@@ -1,44 +1,67 @@
 import 'bootstrap/dist/css/bootstrap.css'
-var searchField = document.getElementById("searchField");
-var tableFull = document.getElementById("tableFull");
-var tableBody = document.getElementById("tableBody");
-var searchBtn = document.getElementById("searchBtn");
-var addPhone = document.getElementById("addPhone");
-var addedPhones = document.getElementById("addedPhones");
-var phoneError = document.getElementById("phoneError");
-var postBtn = document.getElementById("postBtn");
-var putBtn = document.getElementById("putBtn");
-var getPersonBtn = document.getElementById("getPersonBtn");
-var deletePersonBtn = document.getElementById("deletePersonBtn");
-var hobbyBtn = document.getElementById("hobbyBtn");
-var hobbyCountBtn = document.getElementById("hobbyCountBtn");
-var zipcodeBtn = document.getElementById("zipcodeBtn");
-var hobbyDropDownValues = document.getElementById("hobbyName");
-var hobbyError = document.getElementById("hobbyError");
-var hobbyDescription = document.getElementById("hobbyDescription");
-var errorMsgDiv = document.getElementById("errorMsg");
-var tableCityBody = document.getElementById("cityBody");
-var tableCity = document.getElementById("tableCity");
-var addHobbyBtn = document.getElementById("addHobbyBtn");
+const searchField = document.getElementById("searchField");
+const tableFull = document.getElementById("tableFull");
+const tableBody = document.getElementById("tableBody");
+const searchBtn = document.getElementById("searchBtn");
+const addPhone = document.getElementById("addPhone");
+const addedPhones = document.getElementById("addedPhones");
+const phoneError = document.getElementById("phoneError");
+const postBtn = document.getElementById("postBtn");
+const putBtn = document.getElementById("putBtn");
+const getPersonBtn = document.getElementById("getPersonBtn");
+const deletePersonBtn = document.getElementById("deletePersonBtn");
+const hobbyBtn = document.getElementById("hobbyBtn");
+const hobbyCountBtn = document.getElementById("hobbyCountBtn");
+const zipcodeBtn = document.getElementById("zipcodeBtn");
+const hobbyDropDownValues = document.getElementById("hobbyName");
+const hobbyError = document.getElementById("hobbyError");
+const hobbyDescription = document.getElementById("hobbyDescription");
+const errorMsgDiv = document.getElementById("errorMsg");
+const tableCityBody = document.getElementById("cityBody");
+const tableCity = document.getElementById("tableCity");
+const addHobbyBtn = document.getElementById("addHobbyBtn");
+const deleteHobbyBtn = document.getElementById("deleteHobbyBtn");
+const contactInfoBtn = document.getElementById("contactInfoBtn");
 var phoneList = [];
 var hobbyList = [];
 var allHobbyList = [];
 
 getAllHobbies();
+
 postBtn.addEventListener("click", postPerson)
 addPhone.addEventListener("click", addPhoneToList);
 searchBtn.addEventListener("click", getPerson);
 addedPhones.addEventListener("click", removePhone);
 getPersonBtn.addEventListener("click", personInfoToForm);
 deletePersonBtn.addEventListener("click", deletePerson);
+deleteHobbyBtn.addEventListener("click", deleteHobby);
 hobbyBtn.addEventListener("click", getHobbies);
 zipcodeBtn.addEventListener("click", getCityInfo);
 putBtn.addEventListener("click", putPerson);
 addHobbyBtn.addEventListener("click", addHobbyToList);
 hobbyDescription.addEventListener("click", removeHobby);
 hobbyCountBtn.addEventListener("click", getHobbyCount);
-console.log(allHobbyList);
+contactInfoBtn.addEventListener("click", getContactInfo);
 
+function getContactInfo() {
+    tableFull.style = "visible";
+    fetch("http://localhost:8080/CA2/api/person/contactinfo")
+        .then(handleHttpErrors)
+        .then(data => {
+            tableBody.innerHTML = data.map(data => "<tr><td>" + data.firstName + " " + data.lastName + "</td>"
+            + "<td>" + data.email + "</td><td>" + data.phoneNumber.join(", ") + "</td><td>" + data.addressStreet + " - Add. Info: " + data.addressAdditionalInfo + "</td><td>"
+            + data.city + "</td><td>" + data.zipcode + "</td>");
+        })
+        .catch(err => {
+            console.log('caught :' + err);
+            if (err.httpError) {
+                err.fullError.then(displaySearchError);
+            }
+            else {
+                console.log("Network error");
+            }
+        })
+}
 
 function getHobbyCount()
 {
@@ -122,7 +145,6 @@ function getPerson() {
 }
 
 function postPerson() {
-
     var firstName = document.getElementById("firstName").value;
     var lastName = document.getElementById("lastName").value;
     var email = document.getElementById("email").value;
@@ -231,7 +253,20 @@ function deletePerson() {
                 console.log("Network error")
             }
         })
-
+}
+function deleteHobby() {
+    var id = document.getElementById("id").value;
+    fetch("http://localhost:8080/CA2/api/hobby/" + id, makeOptions("DELETE"))
+        .then(handleHttpErrors)
+        .then(data => console.log(data))
+        .catch(err => {
+            if (err.httpError) {
+                err.fullError.then(displaySearchError)
+            }
+            else {
+                console.log("Network error")
+            }
+        })
 }
 
 function getHobbies() {
@@ -297,10 +332,14 @@ function personInfoToForm() {
         document.getElementById("firstName").value = data.firstName;
         document.getElementById("lastName").value = data.lastName;
         document.getElementById("email").value = data.email;
-        document.getElementById("street").value = data.addressStreet;
-        document.getElementById("additionalInfo").value = data.addressAdditionalInfo;
-        document.getElementById("zipCode").value = data.zipcode;
-        document.getElementById("city").value = data.city;
+        document.getElementById("street").value = data.address.street;
+        document.getElementById("additionalInfo").value = data.address.additionalInfo;
+        document.getElementById("zipCode").value = data.cityInfo.zipCode;
+        document.getElementById("city").value = data.cityInfo.city;
+        var personHobbies = data.hobbies;
+        var personNumbers = data.phoneNumber;
+        HobbiesToHTML(personHobbies);
+        phonesToHTML(personNumbers);
     }
 }
 
@@ -323,6 +362,7 @@ function addPhoneToList() {
 }
 
 function phonesToHTML(array) {
+    console.log("array: " + array);
     addedPhones.innerHTML = "";
     addedPhones.innerHTML = array.map(phone => '<button type="button" class="close" aria-label="Close">' +
         '<span aria-hidden="true" id="' + phone.number + '">&times;</span></button><p>' + phone.description + "<br>" + phone.number + '</p>').join('');
