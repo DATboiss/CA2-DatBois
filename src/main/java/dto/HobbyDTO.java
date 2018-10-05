@@ -1,5 +1,7 @@
 package dto;
 
+import entity.Hobby;
+
 /**
  *
  * @author wtfak
@@ -14,10 +16,10 @@ public class HobbyDTO
 
     }
 
-    public HobbyDTO(String name, String description)
+    public HobbyDTO(Hobby h)
     {
-        this.name = name;
-        this.description = description;
+        this.name = h.getName();
+        this.description = h.getDescription();
     }
 
     public String getName()

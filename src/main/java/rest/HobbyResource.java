@@ -3,6 +3,7 @@ package rest;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import dto.HobbyDTO;
 import entity.Hobby;
 import facade.PersonFacade;
 import java.util.List;
@@ -48,7 +49,7 @@ public class HobbyResource
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllHobbies()
     {
-        List<Hobby> hobbies = null;
+        List<HobbyDTO> hobbies = null;
         hobbies = pf.getAllHobbies();
         if (hobbies != null)
         {
