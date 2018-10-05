@@ -23,7 +23,8 @@ deletePersonBtn.addEventListener("click", deletePerson);
 hobbyBtn.addEventListener("click", getHobbies);
 zipcodeBtn.addEventListener("click", getZipCodes)
 
-var URL = "http://localhost:8084/CA2/api/person/";
+var URL = "http://localhost:8080/CA2/api/person/";
+
 function makeOptions(method, body) {
     var opts = {
         method: method,
@@ -48,8 +49,7 @@ function getPerson() {
         .catch(err => {
             if (err.httpError) {
                 err.fullError.then(e => console.log(e));
-            }
-            else {
+            } else {
                 console.log("Network error");
             }
         })
@@ -63,8 +63,8 @@ function postPerson() {
     var additionalInfo = document.getElementById("additionalInfo").value;
     var zipCode = document.getElementById("zipCode").value;
     var city = document.getElementById("city").value;
-    var hobby = "WoW"//document.getElementById("hobbyName");
-    var hobbyDesc = "Gamez"//document.getElementById("hobbyDescription");
+    var hobby = "WoW" //document.getElementById("hobbyName");
+    var hobbyDesc = "Gamez" //document.getElementById("hobbyDescription");
     var p = {
         firstName: firstName,
         lastName: lastName,
@@ -90,12 +90,12 @@ function postPerson() {
         .catch(err => {
             if (err.httpError) {
                 err.fullError.then(e => console.log(e.message))
-            }
-            else {
+            } else {
                 console.log("Network error")
             }
         })
 }
+
 function deletePerson() {
     var id = document.getElementById("id").value;
     fetch(URL + id, makeOptions("DELETE"))
@@ -104,43 +104,38 @@ function deletePerson() {
         .catch(err => {
             if (err.httpError) {
                 err.fullError.then(e => console.log(e.message))
-            }
-            else {
+            } else {
                 console.log("Network error")
             }
         })
 
 }
 
-function getHobbies()
-{
+function getHobbies() {
     fetch(URL + "hobby/" + searchField.value)
-    .then(handleHttpErrors)
-    .then(dataToTable)
-    .catch(err => {
-        if (err.httpError) {
-            err.fullError.then(e => console.log(e));
-        }
-        else {
-            console.log("Network error");
-        }
-    })
+        .then(handleHttpErrors)
+        .then(dataToTable)
+        .catch(err => {
+            if (err.httpError) {
+                err.fullError.then(e => console.log(e));
+            } else {
+                console.log("Network error");
+            }
+        })
 }
 
-function getZipCodes()
-{
+function getZipCodes() {
     fetch(URL + "zipCode/" + searchField.value)
-    .then(handleHttpErrors)
-    //TODO create table with only city & zip code
-    .then(dataToTable)
-    .catch(err => {
-        if (err.httpError) {
-            err.fullError.then(e => console.log(e));
-        }
-        else {
-            console.log("Network error");
-        }
-    }) 
+        .then(handleHttpErrors)
+        //TODO create table with only city & zip code
+        .then(dataToTable)
+        .catch(err => {
+            if (err.httpError) {
+                err.fullError.then(e => console.log(e));
+            } else {
+                console.log("Network error");
+            }
+        })
 }
 
 //Used to determine which REST method will be called
@@ -153,8 +148,7 @@ function getSearchValue(pathParameter) {
         //if the search box contains a number
         if (hasNumber.test(searchParameter)) {
             pathParameter = "address/" + searchParameter;
-        }
-        else {
+        } else {
             pathParameter = "name/" + searchParameter;
         }
     }
@@ -163,8 +157,7 @@ function getSearchValue(pathParameter) {
         var numberToString = searchParameter.toString();
         if (numberToString.length == 3 || numberToString.length == 4) {
             pathParameter = "zipCode/" + searchParameter;
-        }
-        else {
+        } else {
             pathParameter = "phoneNumber/" + searchParameter;
         }
     }
@@ -180,8 +173,7 @@ function personInfoToForm() {
         .catch(err => {
             if (err.httpError) {
                 err.fullError.then(e => console.log(e));
-            }
-            else {
+            } else {
                 console.log("Network error");
             }
         })
@@ -209,8 +201,7 @@ function addPhoneToList() {
         phoneNumbers.push(phone);
         phonesToHTML(phoneNumbers);
         phoneError.innerText = "";
-    }
-    else {
+    } else {
         phoneError.innerText = "You have already added this phone.";
         phoneError.style.color = 'red';
     }
@@ -234,20 +225,18 @@ function removePhone(e) {
 
 
 function dataToTable(data) {
-    console.log(data.stringify);
-    
-    tableBody.innerHTML = data.map(data => "<tr><td>" + data.firstName + " " + data.lastName + "</td>"
-        + "<td>" + data.email + "</td><td>" + data.phoneNumber.join("\n") + "</td><td>" + data.addressStreet + "</td><td>"
-        + data.city + "</td><td>" + data.zipcode + "</td><td>" + data.hobbies.join("\n") + "</td>");
+    tableBody.innerHTML = data.map(data => "<tr><td>" + data.firstName + " " + data.lastName + "</td>" +
+        "<td>" + data.email + "</td><td>" + data.phoneNumber.join("\n") + "</td><td>" + data.addressStreet + "</td><td>" +
+        data.city + "</td><td>" + data.zipcode + "</td><td>" + data.hobbies.join("\n") + "</td>");
+    tableFull.style = "visible";
 }
 
 
 function handleHttpErrors(res) {
     if (!res.ok) {
-        return Promise.reject({ message: res.message })
-    }
-    else
+        return Promise.reject({
+            message: res.message
+        })
+    } else
         return res.json()
 }
-
-

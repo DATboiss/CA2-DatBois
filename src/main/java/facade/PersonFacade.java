@@ -34,11 +34,9 @@ public class PersonFacade {
         p.getAddress().setCityinfo(ci);
         if (p.getPhoneCollection() != null)
         {
-            System.out.println("####################vi kommer herind");
             Collection<Phone> phoneArr = p.getPhoneCollection();
             for (Phone phone : phoneArr)
             {
-                System.out.println("###### vikommer også herind");
                 phone.setPerson(p);
             }
         }
@@ -120,7 +118,7 @@ public class PersonFacade {
 
         try
         {
-            persons = em.createQuery("SELECT NEW dto.PersonDTO(p) FROM Person p JOIN Hobby h WHERE h.name = :name", PersonDTO.class)
+            persons = em.createQuery("SELECT NEW dto.PersonDTO(p) FROM Person p JOIN Hobby h WHERE p MEMBER OF h.personCollection AND h.name = :name", PersonDTO.class)
                     .setParameter("name", hobbyName).getResultList();
         } finally
         {

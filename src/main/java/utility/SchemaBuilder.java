@@ -31,7 +31,7 @@ public class SchemaBuilder
         Hobby h1 = new Hobby("Fodbold", "Stor sport");
         Hobby h2 = new Hobby("Karate", "Kampsport");
         Cityinfo ci = new Cityinfo("2990", "nivå");
-        Address a = new Address("Hasselhøj", "108", ci);
+        Address a = new Address("Hasselhøj 108", "", ci);
         Person p = new Person("Test@gmail.com", "Emil", "Hermansen", a);
         Phone p1 = new Phone("25582940", "Mobil");
         p.addHobby(h1);
@@ -42,7 +42,7 @@ public class SchemaBuilder
         Hobby h3 = new Hobby("Håndbold", "Stor sport");
         Phone p2 = new Phone("12345678", "Mobil");
         Cityinfo ci2 = new Cityinfo("2980", "Kokkedal");
-        Address a2 = new Address("Hasselhøj", "108", ci2);
+        Address a2 = new Address("Testvej 1", "3.mf", ci2);
         Person pp = new Person("Adam@gmail.com", "Adam", "Saidane", a2);
         pp.addHobby(h3);
         pp.addPhone(p2);
