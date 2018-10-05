@@ -28,8 +28,7 @@ import javax.ws.rs.core.Response;
  * @author adams
  */
 @Path("person")
-public class PersonResource
-{
+public class PersonResource {
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private PersonFacade pf = new PersonFacade(Persistence.createEntityManagerFactory("pu"));
@@ -140,12 +139,20 @@ public class PersonResource
         List<PersonDTO> p = null;
         p = pf.getPersonsByCity(zipCode);
         System.out.println("=================SIZE=========\n" + p.size());
-        if (p != null)
+        if (!p.isEmpty())
         {
             return Response.ok(GSON.toJson(p)).build();
         } else
         {
-            throw new NoPersonException("No persons with the given zip was found");
+            try
+            {
+                throw new NoPersonException("No persons with the given zip was found");
+            } catch (NoPersonException e)
+            {
+                ExceptionError ee = new ExceptionError(e, 406, false);
+                String errorJson = GSON.toJson(ee);
+                return Response.status(406).entity(errorJson).build();
+            }
         }
     }
 
