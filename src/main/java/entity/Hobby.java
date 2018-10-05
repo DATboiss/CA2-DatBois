@@ -51,7 +51,7 @@ public class Hobby implements Serializable {
         , @JoinColumn(name = "Person_Address_idAddress", referencedColumnName = "Address_idAddress")
         , @JoinColumn(name = "Person_Address_CityInfo_idCityInfo", referencedColumnName = "Address_CityInfo_idCityInfo")
     })
-    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
     private Collection<Person> personCollection = new ArrayList();
 
     public Hobby()
@@ -62,7 +62,6 @@ public class Hobby implements Serializable {
     {
         this.name = name;
         this.description = description;
-        this.personCollection = new ArrayList();
     }
 
     public Integer getIdHobby()
@@ -97,6 +96,7 @@ public class Hobby implements Serializable {
     
     public void addPerson(Person person)
     {
+        person.getHobbyCollection().add(this);
         personCollection.add(person);
     }
 
