@@ -1,6 +1,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -44,7 +45,7 @@ public class Address implements Serializable
     private Cityinfo cityinfo;
     
     @OneToMany(mappedBy = "address", fetch = FetchType.EAGER)
-    private Collection<Person> personCollection;
+    private Collection<Person> personCollection = new ArrayList();
 
     public Address()
     {

@@ -51,7 +51,7 @@ public class Person implements Serializable
     private Collection<Hobby> hobbyCollection = new ArrayList();
 
     @JoinColumn(name = "Phone_idPhone", referencedColumnName = "idPhone")
-    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "person", fetch = FetchType.EAGER)
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "person", fetch = FetchType.EAGER)
     private Collection<Phone> phoneCollection = new ArrayList();
 
     @JoinColumns(
@@ -60,7 +60,7 @@ public class Person implements Serializable
                 , @JoinColumn(name = "Address_CityInfo_idCityInfo", referencedColumnName = "CityInfo_idCityInfo")
             })
     
-    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
     private Address address;
 
     public Person()
@@ -75,16 +75,6 @@ public class Person implements Serializable
         this.address = address;
     }
     
-//    public Person(PersonDTO pDTO)
-//    {
-//        this.firstName = pDTO.getFirstName();
-//        this.lastName = pDTO.getLastName();
-//        this.email = pDTO.getEmail();
-//        this.address = new Address(pDTO.getAddressStreet(), pDTO.getAddressAdditionalInfo(), new Cityinfo(pDTO.getZipcode(), pDTO.getCity()));
-//                
-//    }
-    
-
     public Integer getIdPerson()
     {
         return idPerson;
@@ -126,9 +116,15 @@ public class Person implements Serializable
         return hobbyCollection;
     }
     
+//    public void addHobby1(Hobby hobby)
+//    {
+//        hobby.addPerson2(this);
+//        hobbyCollection.add(hobby);
+//    }
+    
     public void addHobby(Hobby hobby)
     {
-        hobby.addPerson(this);
+        hobby.getPersonCollection().add(this);
         hobbyCollection.add(hobby);
     }
 

@@ -40,7 +40,7 @@ public class Cityinfo implements Serializable
     @Column(name = "city")
     private String city;
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "cityinfo", fetch = FetchType.EAGER)
-    private Collection<Address> addressCollection;
+    private Collection<Address> addressCollection = new ArrayList();
 
     public Cityinfo()
     {
