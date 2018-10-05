@@ -33,11 +33,9 @@ public class PersonFacade {
         p.getAddress().setCityinfo(ci);
         if (p.getPhoneCollection() != null)
         {
-            System.out.println("####################vi kommer herind");
             Collection<Phone> phoneArr = p.getPhoneCollection();
             for (Phone phone : phoneArr)
             {
-                System.out.println("###### vikommer også herind");
                 phone.setPerson(p);
             }
         }
