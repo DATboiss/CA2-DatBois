@@ -128,15 +128,15 @@ public class PersonFacade {
         return persons;
     }
 
-    public int getPersonCountHobby(String hobbyName)
+    public long getPersonCountHobby(String hobbyName)
     {
         EntityManager em = emf.createEntityManager();
 
-        int count = 0;
+        long count = 0;
 
         try
         {
-            count = (int) em.createQuery("SELECT COUNT(p) FROM Person p JOIN Hobby h WHERE h.name = :hobbyName")
+            count = (long) em.createQuery("SELECT COUNT(p) FROM Person p JOIN Hobby h WHERE h.name = :hobbyName")
                     .setParameter("hobbyName", hobbyName).getSingleResult();
         } finally
         {

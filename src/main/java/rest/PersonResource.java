@@ -2,6 +2,7 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import dto.PersonDTO;
 import entity.Person;
 import facade.AddressFacade;
@@ -217,7 +218,7 @@ public class PersonResource {
             throw new NoPersonException("No persons with the given hobby was found");
         }
     }
-
+    
     /**
      * POST method for creating an instance of Person
      *
