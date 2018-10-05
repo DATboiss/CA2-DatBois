@@ -57,6 +57,7 @@ public class PersonFacade
                     {
                         personHobbies.remove(i);
                         pHobbySize--;
+                        i--;
                         databaseHobbies.get(j).addPerson(p);
 //                        em.merge(databaseHobbies.get(j));
                         break;
