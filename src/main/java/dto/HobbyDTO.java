@@ -3,6 +3,7 @@ package dto;
 /**
  *
  * @author Sebastian
+
  */
 public class HobbyDTO
 {

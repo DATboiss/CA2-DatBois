@@ -29,7 +29,8 @@ import javax.ws.rs.core.Response;
  * @author adams
  */
 @Path("person")
-public class PersonResource {
+public class PersonResource
+{
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private PersonFacade pf = new PersonFacade(Persistence.createEntityManagerFactory("pu"));
@@ -61,16 +62,40 @@ public class PersonResource {
             return Response.ok(GSON.toJson(p)).build();
         } else
         {
-            throw new NoPersonException("No persons were found in our database");
+            try
+            {
+                throw new NoPersonException("No persons were found in the database");
+            } catch (NoPersonException e)
+            {
+                ExceptionError ee = new ExceptionError(e, 206, false);
+                String errorJson = GSON.toJson(ee);
+                return Response.status(206).entity(errorJson).build();
+            }
         }
     }
 
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public String getPerson(@PathParam("id") int id)
+    public Response getPerson(@PathParam("id") int id)
     {
-        return GSON.toJson(pf.getPerson(id));
+        PersonDTO p = null;
+        p = pf.getPerson(id);
+        if (p != null)
+        {
+            return Response.ok(GSON.toJson(p)).build();
+        } else
+        {
+            try
+            {
+                throw new NoPersonException("No persons with the given id was found");
+            } catch (NoPersonException e)
+            {
+                ExceptionError ee = new ExceptionError(e, 406, false);
+                String errorJson = GSON.toJson(ee);
+                return Response.status(406).entity(errorJson).build();
+            }
+        }
     }
 
     /**
@@ -88,13 +113,21 @@ public class PersonResource {
     {
         //Use Facade to get the person, this is just an example of the exception handling
         List<PersonDTO> p = null;
-        pf.getPersonByAddress(address);
+        p = pf.getPersonByAddress(address);
         if (!p.isEmpty())
         {
             return Response.ok(GSON.toJson(p)).build();
         } else
         {
-            throw new NoPersonException("No persons with the given address was found");
+            try
+            {
+                throw new NoPersonException("No persons with the given address was found");
+            } catch (NoPersonException e)
+            {
+                ExceptionError ee = new ExceptionError(e, 406, false);
+                String errorJson = GSON.toJson(ee);
+                return Response.status(406).entity(errorJson).build();
+            }
         }
     }
 
@@ -119,7 +152,15 @@ public class PersonResource {
             return Response.ok(GSON.toJson(p)).build();
         } else
         {
-            throw new NoPersonException("No persons with the given phone number was found");
+            try
+            {
+                throw new NoPersonException("No persons with the given phone number was found");
+            } catch (NoPersonException e)
+            {
+                ExceptionError ee = new ExceptionError(e, 406, false);
+                String errorJson = GSON.toJson(ee);
+                return Response.status(406).entity(errorJson).build();
+            }
         }
     }
 
@@ -168,7 +209,15 @@ public class PersonResource {
             return Response.ok(GSON.toJson(p)).build();
         } else
         {
-            throw new NoPersonException("No persons with the given name was found");
+            try
+            {
+                throw new NoPersonException("No persons with the given name was found");
+            } catch (NoPersonException e)
+            {
+                ExceptionError ee = new ExceptionError(e, 406, false);
+                String errorJson = GSON.toJson(ee);
+                return Response.status(406).entity(errorJson).build();
+            }
         }
     }
 
@@ -184,13 +233,22 @@ public class PersonResource {
     public Response getPersonWithContactInfo()
     {
         //Use Facade to get the person, this is just an example of the exception handling
-        PersonDTO p = null;
+        List<PersonDTO> p = null;
+        p = pf.getAllPersons();
         if (p != null)
         {
             return Response.ok(GSON.toJson(p)).build();
         } else
         {
-            throw new NoPersonException("No persons with the given address was found");
+            try
+            {
+                throw new NoPersonException("No persons were found in the database");
+            } catch (NoPersonException e)
+            {
+                ExceptionError ee = new ExceptionError(e, 206, false);
+                String errorJson = GSON.toJson(ee);
+                return Response.status(206).entity(errorJson).build();
+            }
         }
     }
 
@@ -215,10 +273,18 @@ public class PersonResource {
             return Response.ok(GSON.toJson(p)).build();
         } else
         {
-            throw new NoPersonException("No persons with the given hobby was found");
+            try
+            {
+                throw new NoPersonException("No persons with the given hobby was found");
+            } catch (NoPersonException e)
+            {
+                ExceptionError ee = new ExceptionError(e, 406, false);
+                String errorJson = GSON.toJson(ee);
+                return Response.status(406).entity(errorJson).build();
+            }
         }
     }
-    
+
     /**
      * POST method for creating an instance of Person
      *
@@ -226,7 +292,7 @@ public class PersonResource {
      */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public void postPerson(String json)
+    public Response postPerson(String json)
     {
         Person p = null;
         p = GSON.fromJson(json, Person.class);
@@ -236,9 +302,17 @@ public class PersonResource {
             pf.addPerson(p);
         } else
         {
-            throw new NoPersonException("Something went wrong when trying to add the person in the database");
+            try
+            {
+                throw new NoPersonException("Attempt to add person was unsuccesful. Please contact support");
+            } catch (NoPersonException e)
+            {
+                ExceptionError ee = new ExceptionError(e, 406, false);
+                String errorJson = GSON.toJson(ee);
+                return Response.status(406).entity(errorJson).build();
+            }
         }
-
+        return Response.ok().build();
     }
 
     /**
@@ -250,7 +324,7 @@ public class PersonResource {
     @PUT
     @Path("update")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void putPerson(String json)
+    public Response putPerson(String json)
     {
         Person p = null;
         p = GSON.fromJson(json, Person.class);
@@ -259,8 +333,17 @@ public class PersonResource {
             pf.editPerson(p);
         } else
         {
-            throw new NoPersonException("Something went wrong when trying to edit the person in the database");
+            try
+            {
+                throw new NoPersonException("Attempt to update person was unsuccesful. Please contact support");
+            } catch (NoPersonException e)
+            {
+                ExceptionError ee = new ExceptionError(e, 406, false);
+                String errorJson = GSON.toJson(ee);
+                return Response.status(406).entity(errorJson).build();
+            }
         }
+        return Response.ok().build();
     }
 
     /**
@@ -271,9 +354,23 @@ public class PersonResource {
     @DELETE
     @Path("{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void deletePerson(@PathParam("id") int id)
+    public Response deletePerson(@PathParam("id") int id)
     {
-        pf.deletePerson(id);
+        Person p = null;
+        p = pf.deletePerson(id);
+        if (p == null)
+        {
+            try
+            {
+                throw new NoPersonException("Attempt to delete person was unsuccesful. Please contact support");
+            } catch (NoPersonException e)
+            {
+                ExceptionError ee = new ExceptionError(e, 406, false);
+                String errorJson = GSON.toJson(ee);
+                return Response.status(406).entity(errorJson).build();
+            }
+        }
+        return Response.ok().build();
     }
-
 }
+

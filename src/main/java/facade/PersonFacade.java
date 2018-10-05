@@ -1,5 +1,6 @@
 package facade;
 
+import dto.HobbyDTO;
 import dto.PersonDTO;
 import entity.Cityinfo;
 import entity.Hobby;
@@ -33,11 +34,9 @@ public class PersonFacade {
         p.getAddress().setCityinfo(ci);
         if (p.getPhoneCollection() != null)
         {
-            System.out.println("####################vi kommer herind");
             Collection<Phone> phoneArr = p.getPhoneCollection();
             for (Phone phone : phoneArr)
             {
-                System.out.println("###### vikommer også herind");
                 phone.setPerson(p);
             }
         }
@@ -119,7 +118,7 @@ public class PersonFacade {
 
         try
         {
-            persons = em.createQuery("SELECT NEW dto.PersonDTO(p) FROM Person p JOIN Hobby h WHERE h.name = :name", PersonDTO.class)
+            persons = em.createQuery("SELECT NEW dto.PersonDTO(p) FROM Person p JOIN Hobby h WHERE p MEMBER OF h.personCollection AND h.name = :name", PersonDTO.class)
                     .setParameter("name", hobbyName).getResultList();
         } finally
         {
@@ -136,7 +135,7 @@ public class PersonFacade {
 
         try
         {
-            count = (long) em.createQuery("SELECT COUNT(p) FROM Person p JOIN Hobby h WHERE h.name = :hobbyName")
+            count = (long) em.createQuery("SELECT COUNT(p) FROM Person p JOIN Hobby h WHERE h MEMBER OF P.hobbyCollection AND h.name = :hobbyName")
                     .setParameter("hobbyName", hobbyName).getSingleResult();
         } finally
         {
@@ -243,14 +242,14 @@ public class PersonFacade {
         return persons;
     }
 
-    public List<Hobby> getAllHobbies()
+    public List<HobbyDTO> getAllHobbies()
     {
         EntityManager em = emf.createEntityManager();
-        List<Hobby> hobbies = null;
+        List<HobbyDTO> hobbies = null;
 
         try
         {
-            hobbies = em.createQuery("SELECT h FROM Hobby h", Hobby.class).getResultList();
+            hobbies = em.createQuery("SELECT NEW dto.HobbyDTO(h) FROM Hobby h", HobbyDTO.class).getResultList();
         } finally
         {
             em.close();
