@@ -34,7 +34,6 @@ public class AddressFacade
         
         try
         {
-            em.getTransaction().begin();
             return em.createQuery("SELECT new PersonDTO(p) FROM Person p JOIN Address a JOIN Cityinfo c WHERE p.address.cityinfo.zipCode = :zip")
             .setParameter("zip", zip).getResultList();
         } finally
@@ -49,8 +48,7 @@ public class AddressFacade
         EntityManager em = getEntityManager();
         try
         {
-            Query zips = em.createQuery("SELECT new CityInfoDTO(c.zipCode, c.city) FROM Cityinfo c");
-            return zips.getResultList();
+            return em.createQuery("SELECT new CityInfoDTO(c.zipCode, c.city) FROM Cityinfo c", CityInfoDTO.class).getResultList();
         } finally
         {
             em.close();
