@@ -2,6 +2,7 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import dto.PersonDTO;
 import entity.Person;
 import facade.AddressFacade;
@@ -87,7 +88,7 @@ public class PersonResource {
     {
         //Use Facade to get the person, this is just an example of the exception handling
         List<PersonDTO> p = null;
-        pf.getPersonByAddress(address);
+        p = pf.getPersonByAddress(address);
         if (!p.isEmpty())
         {
             return Response.ok(GSON.toJson(p)).build();
@@ -217,7 +218,7 @@ public class PersonResource {
             throw new NoPersonException("No persons with the given hobby was found");
         }
     }
-
+    
     /**
      * POST method for creating an instance of Person
      *
