@@ -1,5 +1,6 @@
 package facade;
 
+import dto.CityInfoDTO;
 import dto.PersonDTO;
 import entity.Cityinfo;
 import entity.Person;
@@ -34,9 +35,8 @@ public class AddressFacade
         try
         {
             em.getTransaction().begin();
-            Query persons = em.createQuery("SELECT p FROM Person p JOIN Address a JOIN Cityinfo c WHERE p.address.cityinfo.zipCode = :zip");
-            persons.setParameter("zip", zip);
-            return persons.getResultList();
+            return em.createQuery("SELECT new PersonDTO(p) FROM Person p JOIN Address a JOIN Cityinfo c WHERE p.address.cityinfo.zipCode = :zip")
+            .setParameter("zip", zip).getResultList();
         } finally
         {
             em.close();
@@ -44,18 +44,19 @@ public class AddressFacade
 
     }
 
-//    public List<Cityinfo> getZipcodes()
-//    {
-//        EntityManager em = getEntityManager();
-//        try
-//        {
-//            return zipcodes.getResultList();
-//        } finally
-//        {
-//            em.close();
-//        }
-//
-//    }
+    public List<CityInfoDTO> getZipcodes()
+    {
+        EntityManager em = getEntityManager();
+        try
+        {
+            Query zips = em.createQuery("SELECT new CityInfoDTO(c.zipCode, c.city) FROM Cityinfo c");
+            return zips.getResultList();
+        } finally
+        {
+            em.close();
+        }
+
+    }
     
   
 }
