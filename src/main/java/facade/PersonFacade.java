@@ -15,8 +15,7 @@ import javax.persistence.EntityManagerFactory;
  *
  * @author Sebastian
  */
-public class PersonFacade
-{
+public class PersonFacade {
 
     private EntityManagerFactory emf;
     private AddressFacade af = new AddressFacade(emf);
@@ -44,6 +43,14 @@ public class PersonFacade
         }
         try
         {
+            if (p.getPhoneCollection() != null)
+            {
+                Collection<Phone> phoneArr = new ArrayList();
+                for (Phone phone : phoneArr)
+                {
+                    phone.setPerson(p);
+                }
+            }
             em.getTransaction().begin();
             em.persist(p);
             em.getTransaction().commit();
@@ -53,7 +60,6 @@ public class PersonFacade
         }
         return p;
     }
-
 
     public PersonDTO getPersonByPhoneNumber(String phoneNum)
     {
@@ -70,7 +76,7 @@ public class PersonFacade
         }
         return p;
     }
-    
+
     public PersonDTO getPerson(int id)
     {
         EntityManager em = emf.createEntityManager();
@@ -146,7 +152,7 @@ public class PersonFacade
 
         try
         {
-            persons = em.createQuery("SELECT NEW dto.PersonDTO(p) FROM Person p JOIN Address a JOIN Cityinfo c WHERE p.address.cityinfo.zipCode = :zipCode", PersonDTO.class).setParameter("zipCode", zipCode).getResultList();
+            persons = em.createQuery("SELECT NEW dto.PersonDTO(p) FROM Person p WHERE p MEMBER OF p.address.personCollection AND p.address.cityinfo.zipCode = :zipCode", PersonDTO.class).setParameter("zipCode", zipCode).getResultList();
         } finally
         {
             em.close();
