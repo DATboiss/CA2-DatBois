@@ -23,9 +23,8 @@ var addHobbyBtn = document.getElementById("addHobbyBtn");
 var phoneList = [];
 var hobbyList = [];
 var allHobbyList = [];
-getAllHobbies()
 
-
+getAllHobbies();
 postBtn.addEventListener("click", postPerson)
 addPhone.addEventListener("click", addPhoneToList);
 searchBtn.addEventListener("click", getPerson);
@@ -38,7 +37,7 @@ putBtn.addEventListener("click", putPerson);
 addHobbyBtn.addEventListener("click", addHobbyToList);
 hobbyDescription.addEventListener("click", removeHobby);
 hobbyCountBtn.addEventListener("click", getHobbyCount);
-console.log(hobbyList);
+console.log(allHobbyList);
 
 
 function getHobbyCount()
