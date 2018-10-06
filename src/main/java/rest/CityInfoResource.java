@@ -53,7 +53,13 @@ public class CityInfoResource
             return Response.ok(GSON.toJson(c)).build();
         } else
         {
-            throw new NoPersonException("No zipcodes were found in our database");
+            try {
+                throw new NoPersonException("No city information was found in the database");
+            } catch (NoPersonException e) {
+                ExceptionError ee = new ExceptionError(e, 206, false);
+                String errorJson = GSON.toJson(ee);
+                return Response.status(206).entity(errorJson).build();
+            }
         }
     }
 

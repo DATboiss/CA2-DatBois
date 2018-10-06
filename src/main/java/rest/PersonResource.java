@@ -304,7 +304,7 @@ public class PersonResource
         {
             try
             {
-                throw new NoPersonException("Attempt to add person was unsuccesful. Please contact support");
+                throw new NoPersonException("Attempt to add person was unsuccessful. Please contact support");
             } catch (NoPersonException e)
             {
                 ExceptionError ee = new ExceptionError(e, 406, false);
@@ -335,7 +335,7 @@ public class PersonResource
         {
             try
             {
-                throw new NoPersonException("Attempt to update person was unsuccesful. Please contact support");
+                throw new NoPersonException("Attempt to update person was unsuccessful. Please contact support");
             } catch (NoPersonException e)
             {
                 ExceptionError ee = new ExceptionError(e, 406, false);
@@ -362,7 +362,7 @@ public class PersonResource
         {
             try
             {
-                throw new NoPersonException("Attempt to delete person was unsuccesful. Please contact support");
+                throw new NoPersonException("Attempt to delete person was unsuccessful. Please contact support");
             } catch (NoPersonException e)
             {
                 ExceptionError ee = new ExceptionError(e, 406, false);

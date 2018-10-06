@@ -25,8 +25,7 @@ import javax.ws.rs.core.Response;
  * @author Sebastian
  */
 @Path("hobby")
-public class HobbyResource
-{
+public class HobbyResource {
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private PersonFacade pf = new PersonFacade(Persistence.createEntityManagerFactory("pu"));
@@ -36,8 +35,7 @@ public class HobbyResource
     /**
      * Creates a new instance of HobbyResource
      */
-    public HobbyResource()
-    {
+    public HobbyResource() {
     }
 
     /**
@@ -47,19 +45,22 @@ public class HobbyResource
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAllHobbies()
-    {
+    public Response getAllHobbies() {
         List<HobbyDTO> hobbies = null;
         hobbies = pf.getAllHobbies();
-        if (hobbies != null)
-        {
+        if (hobbies != null) {
             return Response.ok(GSON.toJson(hobbies)).build();
-        } else
-        {
-            throw new NoPersonException("No persons were found in our database");
+        } else {
+            try {
+                throw new NoPersonException("No hobbies were found in the database");
+            } catch (NoPersonException e) {
+                ExceptionError ee = new ExceptionError(e, 206, false);
+                String errorJson = GSON.toJson(ee);
+                return Response.status(206).entity(errorJson).build();
+            }
         }
     }
-    
+
     /**
      * Retrieves representation of all instances of Person with the given zip
      * code
@@ -71,14 +72,13 @@ public class HobbyResource
     @GET
     @Path("{hobby}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getHobbyCount(@PathParam("hobby") String hobby)
-    {
+    public Response getHobbyCount(@PathParam("hobby") String hobby) {
         //Use Facade to get the person, this is just an example of the exception handling
         long count = pf.getPersonCountHobby(hobby);
-        
+
         JsonObject js = new JsonObject();
         js.addProperty("count", count);
-            return Response.ok(GSON.toJson(js)).build();
+        return Response.ok(GSON.toJson(js)).build();
     }
 
     /**
@@ -86,9 +86,4 @@ public class HobbyResource
      *
      * @param content representation for the resource
      */
-    @PUT
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void putJson(String content)
-    {
-    }
 }
