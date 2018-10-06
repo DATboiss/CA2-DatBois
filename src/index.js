@@ -22,6 +22,7 @@ const tableCity = document.getElementById("tableCity");
 const addHobbyBtn = document.getElementById("addHobbyBtn");
 const deleteHobbyBtn = document.getElementById("deleteHobbyBtn");
 const contactInfoBtn = document.getElementById("contactInfoBtn");
+var URL = "http://localhost:8080/CA2/api/person/";
 var phoneList = [];
 var hobbyList = [];
 var allHobbyList = [];
@@ -49,8 +50,8 @@ function getContactInfo() {
         .then(handleHttpErrors)
         .then(data => {
             tableBody.innerHTML = data.map(data => "<tr><td>" + data.firstName + " " + data.lastName + "</td>"
-            + "<td>" + data.email + "</td><td>" + data.phoneNumber.join(", ") + "</td><td>" + data.addressStreet + " - Add. Info: " + data.addressAdditionalInfo + "</td><td>"
-            + data.city + "</td><td>" + data.zipcode + "</td>");
+                + "<td>" + data.email + "</td><td>" + data.phoneNumber.join(", ") + "</td><td>" + data.addressStreet + " - Add. Info: " + data.addressAdditionalInfo + "</td><td>"
+                + data.city + "</td><td>" + data.zipcode + "</td>");
         })
         .catch(err => {
             console.log('caught :' + err);
@@ -63,23 +64,22 @@ function getContactInfo() {
         })
 }
 
-function getHobbyCount()
-{
+function getHobbyCount() {
     var count = document.getElementById("hobyCount");
     fetch("http://localhost:8080/CA2/api/hobby/" + searchField.value)
-    .then(handleHttpErrors)
-    .then(data => {
-        count.innerHTML = "<p>" + "Hobby: " + searchField.value + " has " + data.count + " participants";
-    })
-    .catch(err => {
-        console.log('caught :' + err);
-        if (err.httpError) {
-            err.fullError.then(displaySearchError);
-        }
-        else {
-            console.log("Network error");
-        }
-    })
+        .then(handleHttpErrors)
+        .then(data => {
+            count.innerHTML = "<p>" + "Hobby: " + searchField.value + " has " + data.count + " participants";
+        })
+        .catch(err => {
+            console.log('caught :' + err);
+            if (err.httpError) {
+                err.fullError.then(displaySearchError);
+            }
+            else {
+                console.log("Network error");
+            }
+        })
 }
 
 function addHobbyToList() {
@@ -90,7 +90,7 @@ function addHobbyToList() {
             hobbyList.push(allHobbyList[i]);
             hobbyDescription.innerHTML = hobbyList.map(hobby => '<button type="button" class="close" aria-label="Close">' +
                 '<span aria-hidden="true" id="' + hobby.name + '">&times;</span></button><p>' + hobby.name + "<br>" + hobby.description + '</p>').join("");
-        } 
+        }
     }
 
     console.log(hobbyList);
@@ -112,7 +112,6 @@ function removeHobby(e) {
 
 
 
-var URL = "http://localhost:8080/CA2/api/person/";
 
 function makeOptions(method, body) {
     var opts = {
@@ -167,7 +166,7 @@ function postPerson() {
         },
         hobbyCollection: hobbyList,
     }
-    console.log(JSON.stringify(p));
+
     fetch(URL, makeOptions("POST", p))
         .then(handleHttpErrors)
         .then(data => console.log(data))
@@ -226,7 +225,7 @@ function putPerson() {
         },
         hobbyCollection: hobbies,
     }
-    console.log(JSON.stringify(p));
+
     fetch(URL + "update/", makeOptions("PUT", p))
         .then(handleHttpErrors)
         .then(data => console.log(data))
@@ -240,6 +239,7 @@ function putPerson() {
             }
         })
 }
+
 function deletePerson() {
     var id = document.getElementById("id").value;
     fetch(URL + id, makeOptions("DELETE"))
@@ -254,6 +254,7 @@ function deletePerson() {
             }
         })
 }
+
 function deleteHobby() {
     var id = document.getElementById("id").value;
     fetch("http://localhost:8080/CA2/api/hobby/" + id, makeOptions("DELETE"))
@@ -331,12 +332,10 @@ function personInfoToForm() {
     function dataToForm(data) {
         hobbyList = [];
         phoneList = [];
-        for(var i = 0; i < data.hobbies.length; i++)
-        {
+        for (var i = 0; i < data.hobbies.length; i++) {
             hobbyList.push(data.hobbies[i]);
         }
-        for(var i = 0; i < data.phoneNumber.length; i++)
-        {
+        for (var i = 0; i < data.phoneNumber.length; i++) {
             phoneList.push(data.phoneNumber[i]);
         }
         HobbiesToHTML(hobbyList);
