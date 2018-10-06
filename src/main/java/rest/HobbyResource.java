@@ -2,6 +2,8 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import dto.HobbyDTO;
 import entity.Hobby;
 import facade.PersonFacade;
 import java.util.List;
@@ -13,6 +15,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -46,7 +49,7 @@ public class HobbyResource
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllHobbies()
     {
-        List<Hobby> hobbies = null;
+        List<HobbyDTO> hobbies = null;
         hobbies = pf.getAllHobbies();
         if (hobbies != null)
         {
@@ -55,6 +58,27 @@ public class HobbyResource
         {
             throw new NoPersonException("No persons were found in our database");
         }
+    }
+    
+    /**
+     * Retrieves representation of all instances of Person with the given zip
+     * code
+     *
+     *
+     * @param hobby
+     * @return a response code and representation of a Person
+     */
+    @GET
+    @Path("{hobby}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getHobbyCount(@PathParam("hobby") String hobby)
+    {
+        //Use Facade to get the person, this is just an example of the exception handling
+        long count = pf.getPersonCountHobby(hobby);
+        
+        JsonObject js = new JsonObject();
+        js.addProperty("count", count);
+            return Response.ok(GSON.toJson(js)).build();
     }
 
     /**

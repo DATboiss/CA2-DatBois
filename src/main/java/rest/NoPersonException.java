@@ -11,6 +11,6 @@ public class NoPersonException extends WebApplicationException {
 
     public NoPersonException(String message)
     {
-        super(Response.status(406).entity(message).build());
+        super(message);
     }
 }

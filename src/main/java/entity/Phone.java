@@ -1,6 +1,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -33,8 +34,7 @@ public class Phone implements Serializable
     @Column(name = "description")
     private String description;
 
-    
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Person person;
 
     public Phone()
@@ -81,5 +81,43 @@ public class Phone implements Serializable
     {
         this.person = person;
     }
+
+//    @Override
+//    public String toString()
+//    {
+//        return "Phone{" + "idPhone=" + idPhone + ", number=" + number + ", description=" + description + ", person=" + person + '}';
+//    }
+//    
+
+    @Override
+    public int hashCode()
+    {
+        int hash = 7;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+        if (obj == null)
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
+        final Phone other = (Phone) obj;
+        if (!Objects.equals(this.idPhone, other.idPhone))
+        {
+            return false;
+        }
+        return true;
+    }
+    
 
 }

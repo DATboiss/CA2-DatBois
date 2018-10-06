@@ -3,6 +3,8 @@ package entity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -51,8 +53,8 @@ public class Hobby implements Serializable {
         , @JoinColumn(name = "Person_Address_idAddress", referencedColumnName = "Address_idAddress")
         , @JoinColumn(name = "Person_Address_CityInfo_idCityInfo", referencedColumnName = "Address_CityInfo_idCityInfo")
     })
-    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    private Collection<Person> personCollection;
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
+    private List<Person> personCollection = new ArrayList();
 
     public Hobby()
     {
@@ -62,7 +64,6 @@ public class Hobby implements Serializable {
     {
         this.name = name;
         this.description = description;
-        this.personCollection = new ArrayList();
     }
 
     public Integer getIdHobby()
@@ -90,19 +91,59 @@ public class Hobby implements Serializable {
         this.description = description;
     }
 
-    public Collection<Person> getPersonCollection()
+    public List<Person> getPersonCollection()
     {
         return personCollection;
     }
     
     public void addPerson(Person person)
     {
+        person.getHobbyCollection().add(this);
         personCollection.add(person);
     }
 
-    public void setPersonCollection(Collection<Person> personCollection)
+    public void setPersonCollection(List<Person> personCollection)
     {
         this.personCollection = personCollection;
     }
+    
+
+//    @Override
+//    public String toString()
+//    {
+//        return "Hobby{" + "idHobby=" + idHobby + ", name=" + name + ", description=" + description + ", personCollection=" + personCollection + '}';
+//    }
+
+    @Override
+    public int hashCode()
+    {
+        int hash = 3;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+        if (obj == null)
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
+        final Hobby other = (Hobby) obj;
+        if (!Objects.equals(this.idHobby, other.idHobby))
+        {
+            return false;
+        }
+        return true;
+    }
+    
+    
 
 }

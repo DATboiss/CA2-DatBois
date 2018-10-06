@@ -67,7 +67,7 @@ typings/
 
 # Output of 'npm pack'
 *.tgz
-*/META-INF/*
+/META-INF/*
 target/
 
 

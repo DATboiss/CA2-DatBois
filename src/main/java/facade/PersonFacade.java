@@ -1,9 +1,14 @@
 package facade;
 
+import dto.HobbyDTO;
 import dto.PersonDTO;
+import entity.Address;
 import entity.Cityinfo;
 import entity.Hobby;
 import entity.Person;
+import entity.Phone;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -12,8 +17,7 @@ import javax.persistence.EntityManagerFactory;
  *
  * @author Sebastian
  */
-public class PersonFacade
-{
+public class PersonFacade {
 
     private EntityManagerFactory emf;
     private AddressFacade af = new AddressFacade(emf);
@@ -29,6 +33,46 @@ public class PersonFacade
         String zipCode = p.getAddress().getCityinfo().getZipCode();
         Cityinfo ci = em.createQuery("SELECT c FROM Cityinfo c WHERE c.zipCode = :zipCode", Cityinfo.class).setParameter("zipCode", zipCode).getSingleResult();
         p.getAddress().setCityinfo(ci);
+        ArrayList<Hobby> databaseHobbies = null;
+        ArrayList<Hobby> personHobbies = null;
+        if (p.getPhoneCollection() != null)
+        {
+            Collection<Phone> phoneArr = p.getPhoneCollection();
+            for (Phone phone : phoneArr)
+            {
+                phone.setPerson(p);
+            }
+        }
+        if (p.getHobbyCollection() != null)
+        {
+            databaseHobbies = new ArrayList(em.createQuery("SELECT h FROM Hobby h", Hobby.class).getResultList());
+            personHobbies = new ArrayList(p.getHobbyCollection());
+            int dbHobbySize = databaseHobbies.size();
+            int pHobbySize = personHobbies.size();
+            boolean found = false;
+            for (int i = 0; i < pHobbySize; i++)
+            {
+                found = false;
+                for (int j = 0; j < dbHobbySize; j++)
+                {
+                    if (databaseHobbies.get(j).getName().equals(personHobbies.get(i).getName()))
+                    {
+                        personHobbies.remove(i);
+                        pHobbySize--;
+                        i--;
+                        databaseHobbies.get(j).addPerson(p);
+//                       em.merge(databaseHobbies.get(j));
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found)
+                {
+                    personHobbies.get(i).addPerson(p);
+                }
+            }
+        }
+        p.setHobbyCollection(personHobbies);
         try
         {
             em.getTransaction().begin();
@@ -41,7 +85,6 @@ public class PersonFacade
         return p;
     }
 
-
     public PersonDTO getPersonByPhoneNumber(String phoneNum)
     {
         EntityManager em = emf.createEntityManager();
@@ -49,7 +92,7 @@ public class PersonFacade
 
         try
         {
-            p = em.createQuery("SELECT NEW dto.PersonDTO(p) FROM Person p JOIN Phone phone WHERE phone.number = :number", PersonDTO.class)
+            p = em.createQuery("SELECT NEW dto.PersonDTO(p) FROM Person p JOIN Phone ph WHERE ph MEMBER OF P.phoneCollection AND ph.number = :number", PersonDTO.class)
                     .setParameter("number", phoneNum).getSingleResult();
         } finally
         {
@@ -57,7 +100,7 @@ public class PersonFacade
         }
         return p;
     }
-    
+
     public PersonDTO getPerson(int id)
     {
         EntityManager em = emf.createEntityManager();
@@ -84,9 +127,7 @@ public class PersonFacade
 
         try
         {
-            persons = em.createQuery("SELECT dto.PersonDTO"
-                    + "(p.firstName, p.lastName, p.email, p.address, p.phoneCollection, p.hobbyCollection) "
-                    + "FROM Person p WHERE p.firstName = :firstName AND p.lastName = :lastName", PersonDTO.class)
+            persons = em.createQuery("SELECT NEW dto.PersonDTO(p) FROM Person p WHERE p.firstName = :firstName AND p.lastName = :lastName", PersonDTO.class)
                     .setParameter("firstName", firstName).setParameter("lastName", lastName).getResultList();
         } finally
         {
@@ -102,9 +143,7 @@ public class PersonFacade
 
         try
         {
-            persons = em.createQuery("SELECT dto.PersonDTO"
-                    + "(p.firstName, p.lastName, p.email, p.address, p.phoneCollection, p.hobbyCollection) "
-                    + "FROM Person p WHERE (SELECT h.name FROM p.hobbyCollection h = :name", PersonDTO.class)
+            persons = em.createQuery("SELECT NEW dto.PersonDTO(p) FROM Person p JOIN Hobby h WHERE p MEMBER OF h.personCollection AND h.name = :name", PersonDTO.class)
                     .setParameter("name", hobbyName).getResultList();
         } finally
         {
@@ -113,15 +152,15 @@ public class PersonFacade
         return persons;
     }
 
-    public int getPersonCountHobby(String hobbyName)
+    public long getPersonCountHobby(String hobbyName)
     {
         EntityManager em = emf.createEntityManager();
 
-        int count = 0;
+        long count = 0;
 
         try
         {
-            count = (int) em.createQuery("SELECT COUNT(p) FROM Person p WHERE (SELECT h.name FROM p.hobbyCollection h = :hobbyName)")
+            count = (long) em.createQuery("SELECT COUNT(p) FROM Person p JOIN Hobby h WHERE h MEMBER OF P.hobbyCollection AND h.name = :hobbyName")
                     .setParameter("hobbyName", hobbyName).getSingleResult();
         } finally
         {
@@ -137,7 +176,7 @@ public class PersonFacade
 
         try
         {
-            persons = em.createQuery("SELECT p FROM Person p JOIN Address JOIN Cityinfo c WHERE p.address.cityinfo.zipCode = :zipCode", PersonDTO.class).setParameter("zipCode", zipCode).getResultList();
+            persons = em.createQuery("SELECT NEW dto.PersonDTO(p) FROM Person p WHERE p MEMBER OF p.address.personCollection AND p.address.cityinfo.zipCode = :zipCode", PersonDTO.class).setParameter("zipCode", zipCode).getResultList();
         } finally
         {
             em.close();
@@ -152,9 +191,7 @@ public class PersonFacade
 
         try
         {
-            persons = em.createQuery("SELECT dto.PersonDTO"
-                    + "(p.firstName, p.lastName, p.email, p.address, p.phoneCollection, p.hobbyCollection) "
-                    + "FROM Person p JOIN Address a WHERE p.address.street = :address").setParameter("address", address).getResultList();
+            persons = em.createQuery("SELECT NEW dto.PersonDTO(p) FROM Person p JOIN Address a WHERE p.address.street = :address").setParameter("address", address).getResultList();
         } finally
         {
             em.close();
@@ -169,9 +206,7 @@ public class PersonFacade
 
         try
         {
-            persons = em.createQuery("SELECT dto.PersonDTO"
-                    + "(p.firstName, p.lastName, p.email, p.address, p.phoneCollection, p.hobbyCollection) "
-                    + "FROM Person p", PersonDTO.class).getResultList();
+            persons = em.createQuery("SELECT NEW dto.PersonDTO(p) FROM Person p", PersonDTO.class).getResultList();
         } finally
         {
             em.close();
@@ -181,24 +216,89 @@ public class PersonFacade
 
     public Person editPerson(Person p)
     {
+//        EntityManager em = emf.createEntityManager();
+//        String zipCode = p.getAddress().getCityinfo().getZipCode();
+//        Cityinfo ci = em.createQuery("SELECT c FROM Cityinfo c WHERE c.zipCode = :zipCode", Cityinfo.class).setParameter("zipCode", zipCode).getSingleResult();
+//        p.getAddress().setCityinfo(ci);
+//        if (p.getPhoneCollection() != null)
+//        {
+//            Collection<Phone> phoneArr = p.getPhoneCollection();
+//            for (Phone phone : phoneArr)
+//            {
+//                phone.setPerson(p);
+//            }
+//        }
+//
+//        try
+//        {
+//            em.getTransaction().begin();
+//            em.merge(p);
+//            em.getTransaction().commit();
+//        } finally
+//        {
+//            em.close();
+//        }
+//        return p;
         EntityManager em = emf.createEntityManager();
         String zipCode = p.getAddress().getCityinfo().getZipCode();
         Cityinfo ci = em.createQuery("SELECT c FROM Cityinfo c WHERE c.zipCode = :zipCode", Cityinfo.class).setParameter("zipCode", zipCode).getSingleResult();
         p.getAddress().setCityinfo(ci);
-
+       
+        ArrayList<Hobby> databaseHobbies = null;
+        ArrayList<Hobby> personHobbies = null;
+        if (p.getPhoneCollection() != null)
+        {
+            Collection<Phone> phoneArr = p.getPhoneCollection();
+            for (Phone phone : phoneArr)
+            {
+                phone.setPerson(p);
+            }
+        }
+        if (p.getHobbyCollection() != null)
+        {
+            databaseHobbies = new ArrayList(em.createQuery("SELECT h FROM Hobby h", Hobby.class).getResultList());
+            personHobbies = new ArrayList(p.getHobbyCollection());
+            int dbHobbySize = databaseHobbies.size();
+            int pHobbySize = personHobbies.size();
+            boolean found = false;
+            for (int i = 0; i < pHobbySize; i++)
+            {
+                found = false;
+                for (int j = 0; j < dbHobbySize; j++)
+                {
+                    if (databaseHobbies.get(j).getName().equals(personHobbies.get(i).getName()))
+                    {
+                        personHobbies.remove(i);
+                        pHobbySize--;
+                        i--;
+                        databaseHobbies.get(j).addPerson(p);
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found)
+                {
+                    personHobbies.get(i).addPerson(p);
+                }
+            }
+        }
+        p.setHobbyCollection(personHobbies);
         try
         {
             em.getTransaction().begin();
-            em.merge(p);
+             Person old = em.find(Person.class, p.getIdPerson());
+            old = p;
+            em.merge(old);
             em.getTransaction().commit();
         } finally
         {
             em.close();
         }
         return p;
+
     }
 
-    public Person deletePerson(int id)
+    public Person deletePerson(int id) 
     {
         EntityManager em = emf.createEntityManager();
         Person p = null;
@@ -207,6 +307,12 @@ public class PersonFacade
         {
             em.getTransaction().begin();
             p = em.find(Person.class, id);
+            for (Hobby hobby : p.getHobbyCollection())
+            {
+                hobby.getPersonCollection().remove(p);
+            }
+            p.setHobbyCollection(null);
+            p.getAddress().getPersonCollection().remove(p);
             em.remove(p);
             em.getTransaction().commit();
         } finally
@@ -223,7 +329,8 @@ public class PersonFacade
 
         try
         {
-            persons = em.createQuery("SELECT dto.PersonDTO(p.firstName, p.lastName, p.email, p.address.street, p.address.cityinfo, p.phoneCollection, p.hobbyCollection) FROM Person p JOIN Hobby h WHERE h.name = :hobbyName").setParameter("hobbyName", Hobby).getResultList();
+            persons = em.createQuery("SELECT NEW dto.PersonDTO(p) FROM Person p JOIN Hobby h WHERE h.name = :hobbyName")
+                    .setParameter("hobbyName", Hobby).getResultList();
         } finally
         {
             em.close();
@@ -231,14 +338,13 @@ public class PersonFacade
         return persons;
     }
 
-    public List<Hobby> getAllHobbies()
+    public List<HobbyDTO> getAllHobbies()
     {
         EntityManager em = emf.createEntityManager();
-        List<Hobby> hobbies = null;
-
+        List<HobbyDTO> hobbies = null;
         try
         {
-            hobbies = em.createQuery("SELECT h FROM Hobby h", Hobby.class).getResultList();
+            hobbies = em.createQuery("SELECT NEW dto.HobbyDTO(h) FROM Hobby h", HobbyDTO.class).getResultList();
         } finally
         {
             em.close();
