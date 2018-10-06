@@ -14,6 +14,7 @@
     <input type="submit" id="hobbyBtn" value="Find hobby">
     <input type="submit" id="hobbyCountBtn" value="Get hobby count">
     <input type="submit" id="zipcodeBtn" value="Find Zip Codes">
+    <input type="submit" id="contactInfoBtn" value="Get contact info">
   </div>
 
   <!-- Button trigger modal -->
@@ -39,7 +40,8 @@
               <label for="recipient-name" class="col-form-label">id:</label>
               <input type="text" class="form-control" id="id" placeholder="Only required if you want to update or delete">
               <button type="button" class="btn btn-primary" id="getPersonBtn">Get info</button>
-              <button type="button" class="btn btn-primary" id="deletePersonBtn">Delete person</button><br>
+              <button type="button" class="btn btn-primary" id="deletePersonBtn">Delete person</button>
+              <button type="button" class="btn btn-primary" id="deleteHobbyBtn">Delete hobby</button><br>
 
               <label for="message-text" class="col-form-label">First name:</label>
               <input type="text" class="form-control" id="firstName">
@@ -65,7 +67,6 @@
               <label for="hobbyName">Hobby:</label>
               <select id="hobbyName" class="form-control">
                 <option selected>Choose...</option>
-                <option>...</option>
               </select>
               <button type="button" class="btn btn-primary" id="addHobbyBtn">Add hobby</button>
               <p id="hobbyError"></p>
